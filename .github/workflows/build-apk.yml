@@ -12,6 +12,7 @@ permissions:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - name: Ambil source code
@@ -37,14 +38,27 @@ jobs:
       - name: Ambil dependency
         run: flutter pub get
 
+      - name: Atur memori Gradle
+        run: |
+          echo "" >> android/gradle.properties
+          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1536m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Djava.awt.headless=true" >> android/gradle.properties
+          echo "org.gradle.daemon=false" >> android/gradle.properties
+          echo "org.gradle.parallel=false" >> android/gradle.properties
+          echo "org.gradle.workers.max=2" >> android/gradle.properties
+          echo "org.gradle.vfs.watch=false" >> android/gradle.properties
+          echo "kotlin.compiler.execution.strategy=in-process" >> android/gradle.properties
+
       - name: Build APK release
         env:
+          JAVA_TOOL_OPTIONS: >-
+            -Xmx4g
+            -XX:MaxMetaspaceSize=1536m
+            -Djava.awt.headless=true
           GRADLE_OPTS: >-
             -Dorg.gradle.vfs.watch=false
             -Dorg.gradle.daemon=false
             -Dorg.gradle.parallel=false
             -Dorg.gradle.workers.max=2
-            -Dkotlin.compiler.execution.strategy=in-process
         run: flutter build apk --release --no-pub
 
       - name: Simpan APK
