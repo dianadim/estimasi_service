@@ -21,11 +21,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 
-const String ecoSupabaseUrl =
-    'https://vwqnrmdcmlgwnahlvuqt.supabase.co';
-const String ecoSupabaseAnonKey = 'sb_publishable_2ir0HNOfCFt-zQEkfyvpsA_UYXRlrl3';
+const String ecoSupabaseUrl = 'https://vwqnrmdcmlgwnahlvuqt.supabase.co';
+const String ecoSupabaseAnonKey =
+    'sb_publishable_2ir0HNOfCFt-zQEkfyvpsA_UYXRlrl3';
 
-final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _localNotifications =
+    FlutterLocalNotificationsPlugin();
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -39,17 +40,12 @@ Future<void> main() async {
 
   const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
   await _localNotifications.initialize(
-  settings: const InitializationSettings(
-    android: androidInit,
-  ),
-);
+    settings: const InitializationSettings(android: androidInit),
+  );
 
   // URL project dibuat eksplisit agar APK tetap memiliki host Supabase
   // meskipun build tidak memakai --dart-define SUPABASE_URL.
-  await Supabase.initialize(
-    url: ecoSupabaseUrl,
-    anonKey: ecoSupabaseAnonKey,
-  );
+  await Supabase.initialize(url: ecoSupabaseUrl, anonKey: ecoSupabaseAnonKey);
 
   runApp(const EstimasiServiceApp());
 }
@@ -72,11 +68,7 @@ class DatabaseItem {
   });
 }
 
-enum KategoriEstimasi {
-  jasa,
-  sparePart,
-  bahan,
-}
+enum KategoriEstimasi { jasa, sparePart, bahan }
 
 class ItemEstimasi {
   final String id;
@@ -137,21 +129,14 @@ class EstimasiServiceApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: Color(0xFFD8E2EE),
-            ),
+            borderSide: const BorderSide(color: Color(0xFFD8E2EE)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: biruUtama,
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: biruUtama, width: 2),
           ),
         ),
       ),
@@ -165,11 +150,23 @@ class _InfoHeader extends StatelessWidget {
   final String text;
   const _InfoHeader(this.icon, this.text);
   @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-    Icon(icon, color: Colors.white, size: 19),
-    const SizedBox(width: 7),
-    Flexible(child: Text(text, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-  ]);
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(icon, color: Colors.white, size: 19),
+      const SizedBox(width: 7),
+      Flexible(
+        child: Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ],
+  );
 }
 
 class EstimasiPage extends StatefulWidget {
@@ -185,7 +182,8 @@ class _EstimasiPageState extends State<EstimasiPage> {
   // Master Spare Part/Bahan cloud + cache lokal.
   static const String _kCloudSparePart = 'eco_cloud_sparepart_cache_v1';
   static const String _kCloudBahan = 'eco_cloud_bahan_cache_v1';
-  static const String _kCloudSparePartVersion = 'eco_cloud_sparepart_version_v1';
+  static const String _kCloudSparePartVersion =
+      'eco_cloud_sparepart_version_v1';
   static const String _kCloudBahanVersion = 'eco_cloud_bahan_version_v1';
   bool _sinkronMasterBerjalan = false;
   Database? _masterDb;
@@ -222,9 +220,27 @@ class _EstimasiPageState extends State<EstimasiPage> {
       builder: (dc) => SimpleDialog(
         title: const Text('Pilih Service Advisor perangkat ini'),
         children: [
-          SimpleDialogOption(onPressed: () => Navigator.pop(dc, 'sa1'), child: const ListTile(leading: Icon(Icons.person), title: Text('SA 1'))),
-          SimpleDialogOption(onPressed: () => Navigator.pop(dc, 'sa2'), child: const ListTile(leading: Icon(Icons.person), title: Text('SA 2'))),
-          SimpleDialogOption(onPressed: () => Navigator.pop(dc, 'sa3'), child: const ListTile(leading: Icon(Icons.person), title: Text('SA 3'))),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(dc, 'sa1'),
+            child: const ListTile(
+              leading: Icon(Icons.person),
+              title: Text('SA 1'),
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(dc, 'sa2'),
+            child: const ListTile(
+              leading: Icon(Icons.person),
+              title: Text('SA 2'),
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(dc, 'sa3'),
+            child: const ListTile(
+              leading: Icon(Icons.person),
+              title: Text('SA 3'),
+            ),
+          ),
         ],
       ),
     );
@@ -260,11 +276,19 @@ PDF estimasi dan lampiran temuan kami sertakan untuk dapat diperiksa. Mohon konf
 
 Terima kasih.
 {sa} - Service Advisor''';
-  final templateWaTemuanController = TextEditingController(text: _templateWaTemuanDefault);
+  final templateWaTemuanController = TextEditingController(
+    text: _templateWaTemuanDefault,
+  );
 
-  final namaServiceAdvisorController = TextEditingController(text: 'Dian Adim Jaya');
-  final noWaServiceAdvisorController = TextEditingController(text: '089656500965');
-  final namaRekeningController = TextEditingController(text: 'PT. ASTRA INTERNATIONAL Tbk');
+  final namaServiceAdvisorController = TextEditingController(
+    text: 'Dian Adim Jaya',
+  );
+  final noWaServiceAdvisorController = TextEditingController(
+    text: '089656500965',
+  );
+  final namaRekeningController = TextEditingController(
+    text: 'PT. ASTRA INTERNATIONAL Tbk',
+  );
   final namaBankController = TextEditingController(text: 'PERMATA');
   final nomorRekeningController = TextEditingController(text: '420 926 7255');
 
@@ -309,8 +333,7 @@ Terima kasih.
     await _sinkronTemuanCloud();
     _dengarkanTemuanRealtime();
 
-    final masterKosong =
-        _jumlahSparePartLokal == 0 || _jumlahBahanLokal == 0;
+    final masterKosong = _jumlahSparePartLokal == 0 || _jumlahBahanLokal == 0;
 
     if (mounted) {
       setState(() {
@@ -362,12 +385,16 @@ Terima kasih.
   Future<void> _refreshJumlahMasterLokal() async {
     final db = _masterDb;
     if (db == null) return;
-    _jumlahSparePartLokal = Sqflite.firstIntValue(
+    _jumlahSparePartLokal =
+        Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM sparepart'),
-        ) ?? 0;
-    _jumlahBahanLokal = Sqflite.firstIntValue(
+        ) ??
+        0;
+    _jumlahBahanLokal =
+        Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM bahan'),
-        ) ?? 0;
+        ) ??
+        0;
   }
 
   Future<List<DatabaseItem>> _cariMasterLokal(
@@ -388,12 +415,16 @@ Terima kasih.
         whereArgs: [like, like, like],
         limit: 50,
       );
-      return rows.map((e) => DatabaseItem(
-        kode: (e['kode_part'] ?? '').toString(),
-        nama: (e['nama_part'] ?? '').toString(),
-        harga: (e['harga'] as num?)?.toInt() ?? 0,
-        tipeKendaraan: (e['tipe_kendaraan'] ?? '').toString(),
-      )).toList();
+      return rows
+          .map(
+            (e) => DatabaseItem(
+              kode: (e['kode_part'] ?? '').toString(),
+              nama: (e['nama_part'] ?? '').toString(),
+              harga: (e['harga'] as num?)?.toInt() ?? 0,
+              tipeKendaraan: (e['tipe_kendaraan'] ?? '').toString(),
+            ),
+          )
+          .toList();
     }
 
     final rows = await db.query(
@@ -403,11 +434,15 @@ Terima kasih.
       whereArgs: [like, like],
       limit: 50,
     );
-    return rows.map((e) => DatabaseItem(
-      kode: (e['kode'] ?? '').toString(),
-      nama: (e['nama'] ?? '').toString(),
-      harga: (e['harga'] as num?)?.toInt() ?? 0,
-    )).toList();
+    return rows
+        .map(
+          (e) => DatabaseItem(
+            kode: (e['kode'] ?? '').toString(),
+            nama: (e['nama'] ?? '').toString(),
+            harga: (e['harga'] as num?)?.toInt() ?? 0,
+          ),
+        )
+        .toList();
   }
 
   void bukaPencarianMasterLokal(String judul, KategoriEstimasi kategori) {
@@ -422,70 +457,94 @@ Terima kasih.
             insetPadding: const EdgeInsets.all(16),
             child: SizedBox(
               width: MediaQuery.sizeOf(dialogContext).width < 720
-                  ? MediaQuery.sizeOf(dialogContext).width - 32 : 680,
+                  ? MediaQuery.sizeOf(dialogContext).width - 32
+                  : 680,
               height: MediaQuery.sizeOf(dialogContext).height < 700
-                  ? MediaQuery.sizeOf(dialogContext).height * 0.78 : 650,
-              child: Column(children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  color: biruUtama,
-                  child: Text(judul, style: const TextStyle(
-                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      labelText: kategori == KategoriEstimasi.sparePart
-                          ? 'Cari kode, nama part, atau tipe kendaraan'
-                          : 'Cari kode atau nama bahan',
+                  ? MediaQuery.sizeOf(dialogContext).height * 0.78
+                  : 650,
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    color: biruUtama,
+                    child: Text(
+                      judul,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    onChanged: (value) async {
-                      final mySerial = ++serial;
-                      final q = value.trim();
-                      if (q.isEmpty) {
-                        setD(() { hasil = []; loading = false; });
-                        return;
-                      }
-                      setD(() => loading = true);
-                      final data = await _cariMasterLokal(kategori, q);
-                      if (!dialogContext.mounted || mySerial != serial) return;
-                      setD(() { hasil = data; loading = false; });
-                    },
                   ),
-                ),
-                Expanded(
-                  child: loading
-                      ? const Center(child: CircularProgressIndicator())
-                      : hasil.isEmpty
-                          ? const Center(child: Text('Ketik kata kunci untuk mencari'))
-                          : ListView.separated(
-                              itemCount: hasil.length,
-                              separatorBuilder: (_, __) => const Divider(height: 1),
-                              itemBuilder: (_, i) {
-                                final item = hasil[i];
-                                return ListTile(
-                                  title: Text(item.nama,
-                                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
-                                    kategori == KategoriEstimasi.sparePart &&
-                                            item.tipeKendaraan.isNotEmpty
-                                        ? 'Kode: ${item.kode}\nTipe Kendaraan: ${item.tipeKendaraan}'
-                                        : 'Kode: ${item.kode}',
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextField(
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: kategori == KategoriEstimasi.sparePart
+                            ? 'Cari kode, nama part, atau tipe kendaraan'
+                            : 'Cari kode atau nama bahan',
+                      ),
+                      onChanged: (value) async {
+                        final mySerial = ++serial;
+                        final q = value.trim();
+                        if (q.isEmpty) {
+                          setD(() {
+                            hasil = [];
+                            loading = false;
+                          });
+                          return;
+                        }
+                        setD(() => loading = true);
+                        final data = await _cariMasterLokal(kategori, q);
+                        if (!dialogContext.mounted || mySerial != serial)
+                          return;
+                        setD(() {
+                          hasil = data;
+                          loading = false;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : hasil.isEmpty
+                        ? const Center(
+                            child: Text('Ketik kata kunci untuk mencari'),
+                          )
+                        : ListView.separated(
+                            itemCount: hasil.length,
+                            separatorBuilder: (_, __) =>
+                                const Divider(height: 1),
+                            itemBuilder: (_, i) {
+                              final item = hasil[i];
+                              return ListTile(
+                                title: Text(
+                                  item.nama,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  trailing: Text(rupiah(item.harga.toDouble())),
-                                  onTap: () {
-                                    tambahDatabaseItem(item, kategori);
-                                    Navigator.pop(dialogContext);
-                                  },
-                                );
-                              },
-                            ),
-                ),
-              ]),
+                                ),
+                                subtitle: Text(
+                                  kategori == KategoriEstimasi.sparePart &&
+                                          item.tipeKendaraan.isNotEmpty
+                                      ? 'Kode: ${item.kode}\nTipe Kendaraan: ${item.tipeKendaraan}'
+                                      : 'Kode: ${item.kode}',
+                                ),
+                                trailing: Text(rupiah(item.harga.toDouble())),
+                                onTap: () {
+                                  tambahDatabaseItem(item, kategori);
+                                  Navigator.pop(dialogContext);
+                                },
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -520,20 +579,26 @@ Terima kasih.
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       _kCloudSparePart,
-      jsonEncode(spareParts.map((e) => {
-        'kode_part': e.kode,
-        'nama_part': e.nama,
-        'tipe_kendaraan': e.tipeKendaraan,
-        'harga': e.harga,
-      }).toList()),
+      jsonEncode(
+        spareParts
+            .map(
+              (e) => {
+                'kode_part': e.kode,
+                'nama_part': e.nama,
+                'tipe_kendaraan': e.tipeKendaraan,
+                'harga': e.harga,
+              },
+            )
+            .toList(),
+      ),
     );
     await prefs.setString(
       _kCloudBahan,
-      jsonEncode(bahan.map((e) => {
-        'kode': e.kode,
-        'nama': e.nama,
-        'harga': e.harga,
-      }).toList()),
+      jsonEncode(
+        bahan
+            .map((e) => {'kode': e.kode, 'nama': e.nama, 'harga': e.harga})
+            .toList(),
+      ),
     );
   }
 
@@ -593,10 +658,7 @@ Terima kasih.
           'eco_master_sparepart',
           'kode_part,nama_part,tipe_kendaraan,harga',
         ),
-        _ambilSemuaBaris(
-          'eco_master_bahan',
-          'kode,nama,harga',
-        ),
+        _ambilSemuaBaris('eco_master_bahan', 'kode,nama,harga'),
       ]);
 
       final spRaw = hasil[0];
@@ -649,17 +711,12 @@ Terima kasih.
           final nama = (e['nama_part'] ?? '').toString().trim();
           if (kode.isEmpty && nama.isEmpty) continue;
 
-          batch.insert(
-            'sparepart_sync',
-            {
-              'kode_part': kode,
-              'nama_part': nama,
-              'tipe_kendaraan':
-                  (e['tipe_kendaraan'] ?? '').toString().trim(),
-              'harga': (e['harga'] as num?)?.toInt() ?? 0,
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
+          batch.insert('sparepart_sync', {
+            'kode_part': kode,
+            'nama_part': nama,
+            'tipe_kendaraan': (e['tipe_kendaraan'] ?? '').toString().trim(),
+            'harga': (e['harga'] as num?)?.toInt() ?? 0,
+          }, conflictAlgorithm: ConflictAlgorithm.replace);
 
           n++;
           if (n % 500 == 0) {
@@ -675,23 +732,21 @@ Terima kasih.
           final nama = (e['nama'] ?? '').toString().trim();
           if (kode.isEmpty && nama.isEmpty) continue;
 
-          batch.insert(
-            'bahan_sync',
-            {
-              'kode': kode,
-              'nama': nama,
-              'harga': (e['harga'] as num?)?.toInt() ?? 0,
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
+          batch.insert('bahan_sync', {
+            'kode': kode,
+            'nama': nama,
+            'harga': (e['harga'] as num?)?.toInt() ?? 0,
+          }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
         await batch.commit(noResult: true);
 
-        final spCount = Sqflite.firstIntValue(
+        final spCount =
+            Sqflite.firstIntValue(
               await txn.rawQuery('SELECT COUNT(*) FROM sparepart_sync'),
             ) ??
             0;
-        final bhCount = Sqflite.firstIntValue(
+        final bhCount =
+            Sqflite.firstIntValue(
               await txn.rawQuery('SELECT COUNT(*) FROM bahan_sync'),
             ) ??
             0;
@@ -761,7 +816,7 @@ Terima kasih.
         setState(() {
           statusExcel = _jumlahSparePartLokal > 0
               ? 'Master lokal • $_jumlahSparePartLokal Spare Part • '
-                  '$_jumlahBahanLokal Bahan • cloud gagal diperbarui'
+                    '$_jumlahBahanLokal Bahan • cloud gagal diperbarui'
               : 'Sinkronisasi master gagal • tekan Sinkron Master';
         });
 
@@ -783,7 +838,11 @@ Terima kasih.
     await _sinkronMasterCloud(paksa: true, tampilkanPesan: true);
   }
 
-  Future<void> _simpanItemMasterCloud(int tab, DatabaseItem? lama, DatabaseItem baru) async {
+  Future<void> _simpanItemMasterCloud(
+    int tab,
+    DatabaseItem? lama,
+    DatabaseItem baru,
+  ) async {
     final client = Supabase.instance.client;
     if (tab == 1) {
       if (lama == null) {
@@ -794,12 +853,15 @@ Terima kasih.
           'harga': baru.harga,
         });
       } else {
-        var q = client.from('eco_master_sparepart').update({
-          'kode_part': baru.kode,
-          'nama_part': baru.nama,
-          'tipe_kendaraan': baru.tipeKendaraan,
-          'harga': baru.harga,
-        }).eq('kode_part', lama.kode);
+        var q = client
+            .from('eco_master_sparepart')
+            .update({
+              'kode_part': baru.kode,
+              'nama_part': baru.nama,
+              'tipe_kendaraan': baru.tipeKendaraan,
+              'harga': baru.harga,
+            })
+            .eq('kode_part', lama.kode);
         if (lama.tipeKendaraan.isNotEmpty) {
           q = q.eq('tipe_kendaraan', lama.tipeKendaraan);
         }
@@ -813,11 +875,10 @@ Terima kasih.
           'harga': baru.harga,
         });
       } else {
-        await client.from('eco_master_bahan').update({
-          'kode': baru.kode,
-          'nama': baru.nama,
-          'harga': baru.harga,
-        }).eq('kode', lama.kode);
+        await client
+            .from('eco_master_bahan')
+            .update({'kode': baru.kode, 'nama': baru.nama, 'harga': baru.harga})
+            .eq('kode', lama.kode);
       }
     }
   }
@@ -825,7 +886,10 @@ Terima kasih.
   Future<void> _hapusItemMasterCloud(int tab, DatabaseItem item) async {
     final client = Supabase.instance.client;
     if (tab == 1) {
-      var q = client.from('eco_master_sparepart').delete().eq('kode_part', item.kode);
+      var q = client
+          .from('eco_master_sparepart')
+          .delete()
+          .eq('kode_part', item.kode);
       if (item.tipeKendaraan.isNotEmpty) {
         q = q.eq('tipe_kendaraan', item.tipeKendaraan);
       }
@@ -934,10 +998,7 @@ Terima kasih.
     try {
       final uriDasar = Uri.parse(endpointDasar);
       final uri = uriDasar.replace(
-        queryParameters: {
-          ...uriDasar.queryParameters,
-          'action': 'customer',
-        },
+        queryParameters: {...uriDasar.queryParameters, 'action': 'customer'},
       );
 
       final response = await http.get(uri);
@@ -967,18 +1028,14 @@ Terima kasih.
 
       if (!mounted) return;
       setState(() {
-        namaCustomerController.text =
-            (customer['namaCustomer'] ?? '').toString();
-        noPolisiController.text =
-            (customer['noPolisi'] ?? '').toString();
-        noTeleponController.text =
-            (customer['noTelepon'] ?? '').toString();
-        kilometerController.text =
-            (customer['kilometer'] ?? '').toString();
-        tipeKendaraanController.text =
-            (customer['tipeKendaraan'] ?? '').toString();
-        noRangkaController.text =
-            (customer['noRangka'] ?? '').toString();
+        namaCustomerController.text = (customer['namaCustomer'] ?? '')
+            .toString();
+        noPolisiController.text = (customer['noPolisi'] ?? '').toString();
+        noTeleponController.text = (customer['noTelepon'] ?? '').toString();
+        kilometerController.text = (customer['kilometer'] ?? '').toString();
+        tipeKendaraanController.text = (customer['tipeKendaraan'] ?? '')
+            .toString();
+        noRangkaController.text = (customer['noRangka'] ?? '').toString();
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -988,9 +1045,9 @@ Terima kasih.
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ambil data customer gagal: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Ambil data customer gagal: $e')));
     } finally {
       if (mounted) setState(() => sedangAmbilCustomer = false);
     }
@@ -1015,23 +1072,29 @@ Terima kasih.
     }
 
     final data = <Map<String, dynamic>>[
-      ...daftarSparePart.map((e) => {
-            'operationalNumber': operational,
-            'kode': e.kode,
-            'nama': e.nama,
-            'quantity': e.qty,
-          }),
-      ...daftarBahan.map((e) => {
-            'operationalNumber': operational,
-            'kode': e.kode,
-            'nama': e.nama,
-            'quantity': e.qty,
-          }),
+      ...daftarSparePart.map(
+        (e) => {
+          'operationalNumber': operational,
+          'kode': e.kode,
+          'nama': e.nama,
+          'quantity': e.qty,
+        },
+      ),
+      ...daftarBahan.map(
+        (e) => {
+          'operationalNumber': operational,
+          'kode': e.kode,
+          'nama': e.nama,
+          'quantity': e.qty,
+        },
+      ),
     ];
 
     if (data.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Belum ada Spare Part atau Bahan untuk dikirim')),
+        const SnackBar(
+          content: Text('Belum ada Spare Part atau Bahan untuk dikirim'),
+        ),
       );
       return;
     }
@@ -1047,11 +1110,13 @@ Terima kasih.
       final payload = jsonEncode({
         'operationalNumber': operational,
         'items': data
-            .map((e) => {
-                  'kode': e['kode'],
-                  'nama': e['nama'],
-                  'qty': e['quantity'],
-                })
+            .map(
+              (e) => {
+                'kode': e['kode'],
+                'nama': e['nama'],
+                'qty': e['quantity'],
+              },
+            )
             .toList(),
       });
 
@@ -1090,9 +1155,9 @@ Terima kasih.
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Update Spreadsheet gagal: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Update Spreadsheet gagal: $e')));
     } finally {
       if (mounted) setState(() => sedangUpdateSpreadsheet = false);
     }
@@ -1123,7 +1188,8 @@ Terima kasih.
       if (!mounted) return;
       setState(() {
         loadingExcel = false;
-        statusExcel = '$sumber • ${spareParts.length} Spare Part • ${bahan.length} Bahan';
+        statusExcel =
+            '$sumber • ${spareParts.length} Spare Part • ${bahan.length} Bahan';
       });
     } catch (e) {
       debugPrint('ERROR EXCEL: $e');
@@ -1137,7 +1203,8 @@ Terima kasih.
 
   void _terapkanExcelBytes(Uint8List bytes) {
     final excel = Excel.decodeBytes(bytes);
-    if (cariSheet(excel, 'SPARE PART') == null || cariSheet(excel, 'BAHAN') == null) {
+    if (cariSheet(excel, 'SPARE PART') == null ||
+        cariSheet(excel, 'BAHAN') == null) {
       throw const FormatException('Sheet SPARE PART dan BAHAN wajib tersedia');
     }
     spareParts.clear();
@@ -1145,7 +1212,9 @@ Terima kasih.
     bacaSparePart(excel);
     bacaBahan(excel);
     if (spareParts.isEmpty || bahan.isEmpty) {
-      throw const FormatException('Data SPARE PART atau BAHAN kosong/tidak sesuai format');
+      throw const FormatException(
+        'Data SPARE PART atau BAHAN kosong/tidak sesuai format',
+      );
     }
   }
 
@@ -1168,20 +1237,26 @@ Terima kasih.
       final sp = cariSheet(excel, 'SPARE PART');
       final bh = cariSheet(excel, 'BAHAN');
       if (sp == null || bh == null) {
-        throw const FormatException('Sheet SPARE PART dan BAHAN wajib tersedia');
+        throw const FormatException(
+          'Sheet SPARE PART dan BAHAN wajib tersedia',
+        );
       }
       int jumlahSp = 0;
       for (int i = 1; i < sp.maxRows; i++) {
         final row = sp.row(i);
-        if (cellText(row, 1).isNotEmpty || cellText(row, 2).isNotEmpty) jumlahSp++;
+        if (cellText(row, 1).isNotEmpty || cellText(row, 2).isNotEmpty)
+          jumlahSp++;
       }
       int jumlahBh = 0;
       for (int i = 1; i < bh.maxRows; i++) {
         final row = bh.row(i);
-        if (cellText(row, 0).isNotEmpty || cellText(row, 1).isNotEmpty) jumlahBh++;
+        if (cellText(row, 0).isNotEmpty || cellText(row, 1).isNotEmpty)
+          jumlahBh++;
       }
       if (jumlahSp == 0 || jumlahBh == 0) {
-        throw const FormatException('Data SPARE PART atau BAHAN kosong/tidak sesuai format');
+        throw const FormatException(
+          'Data SPARE PART atau BAHAN kosong/tidak sesuai format',
+        );
       }
 
       if (!mounted) return;
@@ -1195,8 +1270,14 @@ Terima kasih.
             'Database Excel lama di aplikasi akan diganti. Estimasi favorit tetap tersimpan.',
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Batal')),
-            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Import & Ganti')),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text('Batal'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: const Text('Import & Ganti'),
+            ),
           ],
         ),
       );
@@ -1209,23 +1290,23 @@ Terima kasih.
       if (!mounted) return;
       setState(() {
         loadingExcel = false;
-        statusExcel = '${file.name} • ${spareParts.length} Spare Part • ${bahan.length} Bahan';
+        statusExcel =
+            '${file.name} • ${spareParts.length} Spare Part • ${bahan.length} Bahan';
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Database Excel berhasil diganti')),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Import gagal: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Import gagal: $e')));
     }
   }
 
   Sheet? cariSheet(Excel excel, String target) {
     for (final nama in excel.tables.keys) {
-      if (nama.trim().toUpperCase() ==
-          target.trim().toUpperCase()) {
+      if (nama.trim().toUpperCase() == target.trim().toUpperCase()) {
         return excel.tables[nama];
       }
     }
@@ -1273,13 +1354,7 @@ Terima kasih.
 
       if (kode.isEmpty && nama.isEmpty) continue;
 
-      bahan.add(
-        DatabaseItem(
-          kode: kode,
-          nama: nama,
-          harga: harga,
-        ),
-      );
+      bahan.add(DatabaseItem(kode: kode, nama: nama, harga: harga));
     }
   }
 
@@ -1328,10 +1403,7 @@ Terima kasih.
       text = value.toString();
     }
 
-    text = text.replaceAll(
-      RegExp(r'[^0-9]'),
-      '',
-    );
+    text = text.replaceAll(RegExp(r'[^0-9]'), '');
 
     return int.tryParse(text) ?? 0;
   }
@@ -1340,17 +1412,15 @@ Terima kasih.
   // FILTER ITEM
   // ============================================================
 
-  List<ItemEstimasi> get daftarJasa => itemEstimasi
-      .where((e) => e.kategori == KategoriEstimasi.jasa)
-      .toList();
+  List<ItemEstimasi> get daftarJasa =>
+      itemEstimasi.where((e) => e.kategori == KategoriEstimasi.jasa).toList();
 
   List<ItemEstimasi> get daftarSparePart => itemEstimasi
       .where((e) => e.kategori == KategoriEstimasi.sparePart)
       .toList();
 
-  List<ItemEstimasi> get daftarBahan => itemEstimasi
-      .where((e) => e.kategori == KategoriEstimasi.bahan)
-      .toList();
+  List<ItemEstimasi> get daftarBahan =>
+      itemEstimasi.where((e) => e.kategori == KategoriEstimasi.bahan).toList();
 
   // ============================================================
   // TOTAL + DISKON
@@ -1375,12 +1445,10 @@ Terima kasih.
 
   double get subtotalSparePart => subtotalKategori(daftarSparePart);
   double get diskonItemSparePart => diskonKategori(daftarSparePart);
-  double get totalSparePartSebelumDiskonAkhir =>
-      totalKategori(daftarSparePart);
+  double get totalSparePartSebelumDiskonAkhir => totalKategori(daftarSparePart);
   double get diskonAkhirSparePart =>
       totalSparePartSebelumDiskonAkhir * diskonAkhirSparePartPersen / 100;
-  double get diskonSparePart =>
-      diskonItemSparePart + diskonAkhirSparePart;
+  double get diskonSparePart => diskonItemSparePart + diskonAkhirSparePart;
   double get totalSparePart =>
       totalSparePartSebelumDiskonAkhir - diskonAkhirSparePart;
 
@@ -1395,11 +1463,9 @@ Terima kasih.
   double get subtotalKeseluruhan =>
       subtotalJasa + subtotalSparePart + subtotalBahan;
 
-  double get totalSebelumDiskonGrand =>
-      totalJasa + totalSparePart + totalBahan;
+  double get totalSebelumDiskonGrand => totalJasa + totalSparePart + totalBahan;
 
-  double get diskonGrand =>
-      totalSebelumDiskonGrand * diskonGrandPersen / 100;
+  double get diskonGrand => totalSebelumDiskonGrand * diskonGrandPersen / 100;
 
   double get totalDiskon =>
       diskonJasa + diskonSparePart + diskonBahan + diskonGrand;
@@ -1491,11 +1557,9 @@ Terima kasih.
               onPressed: () async {
                 final nama = namaController.text.trim();
 
-                final harga = int.tryParse(
-                      hargaController.text.replaceAll(
-                        RegExp(r'[^0-9]'),
-                        '',
-                      ),
+                final harga =
+                    int.tryParse(
+                      hargaController.text.replaceAll(RegExp(r'[^0-9]'), ''),
                     ) ??
                     0;
 
@@ -1504,18 +1568,23 @@ Terima kasih.
                 // Setiap jasa manual otomatis menjadi Master Jasa.
                 // Duplikat dicegah berdasarkan nama jasa + tipe kendaraan.
                 final tipe = tipeKendaraanController.text.trim();
-                final indexMaster = jasaDatabase.indexWhere((e) =>
-                    e.nama.trim().toLowerCase() == nama.toLowerCase() &&
-                    e.tipeKendaraan.trim().toLowerCase() == tipe.toLowerCase());
+                final indexMaster = jasaDatabase.indexWhere(
+                  (e) =>
+                      e.nama.trim().toLowerCase() == nama.toLowerCase() &&
+                      e.tipeKendaraan.trim().toLowerCase() ==
+                          tipe.toLowerCase(),
+                );
                 if (indexMaster >= 0) {
                   jasaDatabase[indexMaster].harga = harga;
                 } else {
-                  jasaDatabase.add(DatabaseItem(
-                    kode: '',
-                    nama: nama,
-                    harga: harga,
-                    tipeKendaraan: tipe,
-                  ));
+                  jasaDatabase.add(
+                    DatabaseItem(
+                      kode: '',
+                      nama: nama,
+                      harga: harga,
+                      tipeKendaraan: tipe,
+                    ),
+                  );
                 }
                 await simpanDatabaseManual();
                 if (!mounted) return;
@@ -1523,9 +1592,7 @@ Terima kasih.
                 setState(() {
                   itemEstimasi.add(
                     ItemEstimasi(
-                      id: DateTime.now()
-                          .microsecondsSinceEpoch
-                          .toString(),
+                      id: DateTime.now().microsecondsSinceEpoch.toString(),
                       kode: '',
                       nama: nama,
                       harga: harga,
@@ -1566,11 +1633,14 @@ Terima kasih.
             if (keyword.trim().isNotEmpty) {
               final query = keyword.trim().toLowerCase();
 
-              hasil = source.where((item) {
-                return item.kode.toLowerCase().contains(query) ||
-                    item.nama.toLowerCase().contains(query) ||
-                    item.tipeKendaraan.toLowerCase().contains(query);
-              }).take(50).toList();
+              hasil = source
+                  .where((item) {
+                    return item.kode.toLowerCase().contains(query) ||
+                        item.nama.toLowerCase().contains(query) ||
+                        item.tipeKendaraan.toLowerCase().contains(query);
+                  })
+                  .take(50)
+                  .toList();
             }
 
             return Dialog(
@@ -1625,67 +1695,57 @@ Terima kasih.
                     Expanded(
                       child: keyword.trim().isEmpty
                           ? const Center(
-                              child: Text(
-                                'Ketik kode atau nama untuk mencari',
-                              ),
+                              child: Text('Ketik kode atau nama untuk mencari'),
                             )
                           : hasil.isEmpty
-                              ? const Center(
-                                  child: Text('Data tidak ditemukan'),
-                                )
-                              : ListView.separated(
-                                  itemCount: hasil.length,
-                                  separatorBuilder: (_, __) =>
-                                      const Divider(height: 1),
-                                  itemBuilder: (context, index) {
-                                    final item = hasil[index];
+                          ? const Center(child: Text('Data tidak ditemukan'))
+                          : ListView.separated(
+                              itemCount: hasil.length,
+                              separatorBuilder: (_, __) =>
+                                  const Divider(height: 1),
+                              itemBuilder: (context, index) {
+                                final item = hasil[index];
 
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundColor: biruMuda,
-                                        child: Icon(
-                                          kategori ==
-                                                  KategoriEstimasi.sparePart
-                                              ? Icons.settings
-                                              : Icons.inventory_2,
-                                          color: biruUtama,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        item.nama,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: kategori ==
-                                              KategoriEstimasi.sparePart
-                                          ? Text(
-                                              item.tipeKendaraan.isEmpty
-                                                  ? 'Kode: ${item.kode}'
-                                                  : 'Kode: ${item.kode}\n'
-                                                      'Tipe Kendaraan: ${item.tipeKendaraan}',
-                                            )
-                                          : Text(
-                                              'Kode: ${item.kode}',
-                                            ),
-                                      trailing: Text(
-                                        rupiah(item.harga.toDouble()),
-                                        style: const TextStyle(
-                                          color: biruUtama,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        tambahDatabaseItem(
-                                          item,
-                                          kategori,
-                                        );
+                                return ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: biruMuda,
+                                    child: Icon(
+                                      kategori == KategoriEstimasi.sparePart
+                                          ? Icons.settings
+                                          : Icons.inventory_2,
+                                      color: biruUtama,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    item.nama,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle:
+                                      kategori == KategoriEstimasi.sparePart
+                                      ? Text(
+                                          item.tipeKendaraan.isEmpty
+                                              ? 'Kode: ${item.kode}'
+                                              : 'Kode: ${item.kode}\n'
+                                                    'Tipe Kendaraan: ${item.tipeKendaraan}',
+                                        )
+                                      : Text('Kode: ${item.kode}'),
+                                  trailing: Text(
+                                    rupiah(item.harga.toDouble()),
+                                    style: const TextStyle(
+                                      color: biruUtama,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    tambahDatabaseItem(item, kategori);
 
-                                        Navigator.pop(dialogContext);
-                                      },
-                                    );
+                                    Navigator.pop(dialogContext);
                                   },
-                                ),
+                                );
+                              },
+                            ),
                     ),
                   ],
                 ),
@@ -1702,9 +1762,7 @@ Terima kasih.
   // ============================================================
 
   void editQty(ItemEstimasi item) {
-    final controller = TextEditingController(
-      text: formatQty(item.qty),
-    );
+    final controller = TextEditingController(text: formatQty(item.qty));
 
     showDialog(
       context: context,
@@ -1720,9 +1778,7 @@ Terima kasih.
                 decimal: true,
               ),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[0-9,.]'),
-                ),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
               ],
               decoration: const InputDecoration(
                 labelText: 'Satuan / Qty',
@@ -1730,11 +1786,7 @@ Terima kasih.
                 prefixIcon: Icon(Icons.numbers),
               ),
               onSubmitted: (_) {
-                simpanQty(
-                  dialogContext,
-                  item,
-                  controller.text,
-                );
+                simpanQty(dialogContext, item, controller.text);
               },
             ),
           ),
@@ -1747,11 +1799,7 @@ Terima kasih.
             ),
             FilledButton(
               onPressed: () {
-                simpanQty(
-                  dialogContext,
-                  item,
-                  controller.text,
-                );
+                simpanQty(dialogContext, item, controller.text);
               },
               child: const Text('Simpan'),
             ),
@@ -1761,24 +1809,14 @@ Terima kasih.
     );
   }
 
-  void simpanQty(
-    BuildContext dialogContext,
-    ItemEstimasi item,
-    String input,
-  ) {
-    final text = input
-        .trim()
-        .replaceAll(',', '.');
+  void simpanQty(BuildContext dialogContext, ItemEstimasi item, String input) {
+    final text = input.trim().replaceAll(',', '.');
 
     final qtyBaru = double.tryParse(text);
 
     if (qtyBaru == null || qtyBaru <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Qty harus lebih besar dari 0',
-          ),
-        ),
+        const SnackBar(content: Text('Qty harus lebih besar dari 0')),
       );
       return;
     }
@@ -1809,8 +1847,9 @@ Terima kasih.
             child: TextField(
               controller: controller,
               autofocus: true,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
               ],
@@ -1844,14 +1883,11 @@ Terima kasih.
     ItemEstimasi item,
     String input,
   ) {
-    final diskonBaru =
-        double.tryParse(input.trim().replaceAll(',', '.'));
+    final diskonBaru = double.tryParse(input.trim().replaceAll(',', '.'));
 
     if (diskonBaru == null || diskonBaru < 0 || diskonBaru > 100) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Diskon harus antara 0 sampai 100%'),
-        ),
+        const SnackBar(content: Text('Diskon harus antara 0 sampai 100%')),
       );
       return;
     }
@@ -1876,8 +1912,7 @@ Terima kasih.
           child: TextField(
             controller: controller,
             autofocus: true,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
             ],
@@ -1923,18 +1958,27 @@ Terima kasih.
   static const String _kunciDatabaseManual = 'database_manual_estimasi_v2';
 
   List<String> get daftarTipeKendaraan {
-    final tipe = jasaDatabase.map((e) => e.tipeKendaraan.trim()).where((e) => e.isNotEmpty).toSet().toList();
+    final tipe = jasaDatabase
+        .map((e) => e.tipeKendaraan.trim())
+        .where((e) => e.isNotEmpty)
+        .toSet()
+        .toList();
     tipe.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     return tipe;
   }
 
   Map<String, dynamic> _dbKeJson(DatabaseItem e) => {
-    'kode': e.kode, 'nama': e.nama, 'harga': e.harga, 'tipe': e.tipeKendaraan,
+    'kode': e.kode,
+    'nama': e.nama,
+    'harga': e.harga,
+    'tipe': e.tipeKendaraan,
   };
 
   DatabaseItem _dbDariJson(Map<String, dynamic> e) => DatabaseItem(
-    kode: (e['kode'] ?? '').toString(), nama: (e['nama'] ?? '').toString(),
-    harga: (e['harga'] as num?)?.toInt() ?? 0, tipeKendaraan: (e['tipe'] ?? '').toString(),
+    kode: (e['kode'] ?? '').toString(),
+    nama: (e['nama'] ?? '').toString(),
+    harga: (e['harga'] as num?)?.toInt() ?? 0,
+    tipeKendaraan: (e['tipe'] ?? '').toString(),
   );
 
   Future<void> loadDatabaseManual() async {
@@ -1944,7 +1988,13 @@ Terima kasih.
     try {
       final map = Map<String, dynamic>.from(jsonDecode(raw));
       setState(() {
-        jasaDatabase..clear()..addAll(((map['jasa'] as List?) ?? []).whereType<Map>().map((e) => _dbDariJson(Map<String,dynamic>.from(e))));
+        jasaDatabase
+          ..clear()
+          ..addAll(
+            ((map['jasa'] as List?) ?? []).whereType<Map>().map(
+              (e) => _dbDariJson(Map<String, dynamic>.from(e)),
+            ),
+          );
         // Spare Part/Bahan sekarang disimpan di SQLite lokal,
         // jadi tidak didecode ke RAM saat cold start.
       });
@@ -1953,11 +2003,14 @@ Terima kasih.
 
   Future<void> simpanDatabaseManual() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kunciDatabaseManual, jsonEncode({
-      'jasa': jasaDatabase.map(_dbKeJson).toList(),
-      'sparePart': const [],
-      'bahan': const [],
-    }));
+    await prefs.setString(
+      _kunciDatabaseManual,
+      jsonEncode({
+        'jasa': jasaDatabase.map(_dbKeJson).toList(),
+        'sparePart': const [],
+        'bahan': const [],
+      }),
+    );
   }
 
   Future<void> bukaEditDatabase([int awal = 0]) async {
@@ -1976,8 +2029,8 @@ Terima kasih.
             final sumber = tab == 0
                 ? jasaDatabase
                 : tab == 1
-                    ? spareParts
-                    : bahan;
+                ? spareParts
+                : bahan;
             final hasil = tab == 0
                 ? sumber.where((e) {
                     final q = cari.toLowerCase();
@@ -2070,7 +2123,10 @@ Terima kasih.
                           IconButton(
                             tooltip: 'Hapus',
                             visualDensity: VisualDensity.compact,
-                            icon: const Icon(Icons.delete_outline, color: Colors.red),
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                            ),
                             onPressed: hapus,
                           ),
                         ],
@@ -2091,7 +2147,10 @@ Terima kasih.
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(rupiah(e.harga.toDouble())),
-                    IconButton(icon: const Icon(Icons.edit_outlined), onPressed: edit),
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: edit,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: hapus,
@@ -2109,14 +2168,19 @@ Terima kasih.
               title: const Text('Edit Database'),
               content: SizedBox(
                 width: isPhone ? MediaQuery.sizeOf(context).width * 0.90 : 700,
-                height: isPhone ? MediaQuery.sizeOf(context).height * 0.72 : 560,
+                height: isPhone
+                    ? MediaQuery.sizeOf(context).height * 0.72
+                    : 560,
                 child: Column(
                   children: [
                     SizedBox(
                       width: double.infinity,
                       child: SegmentedButton<int>(
                         segments: [
-                          const ButtonSegment(value: 0, label: Text('Jasa', maxLines: 1)),
+                          const ButtonSegment(
+                            value: 0,
+                            label: Text('Jasa', maxLines: 1),
+                          ),
                           ButtonSegment(
                             value: 1,
                             label: Text(
@@ -2126,7 +2190,10 @@ Terima kasih.
                               style: TextStyle(fontSize: isPhone ? 12 : 14),
                             ),
                           ),
-                          const ButtonSegment(value: 2, label: Text('Bahan', maxLines: 1)),
+                          const ButtonSegment(
+                            value: 2,
+                            label: Text('Bahan', maxLines: 1),
+                          ),
                         ],
                         selected: {tab},
                         showSelectedIcon: !isPhone,
@@ -2158,7 +2225,8 @@ Terima kasih.
                             ? KategoriEstimasi.sparePart
                             : KategoriEstimasi.bahan;
                         final data = await _cariMasterLokal(kategori, q);
-                        if (!dialogContext.mounted || mySerial != serialMaster) return;
+                        if (!dialogContext.mounted || mySerial != serialMaster)
+                          return;
                         setD(() {
                           hasilMaster = data;
                           loadingMaster = false;
@@ -2182,19 +2250,20 @@ Terima kasih.
                       child: loadingMaster
                           ? const Center(child: CircularProgressIndicator())
                           : (tab != 0 && cari.trim().isEmpty)
-                              ? const Center(
-                                  child: Text(
-                                    'Ketik nama atau kode untuk mencari database.',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              : hasil.isEmpty
-                                  ? const Center(child: Text('Data tidak ditemukan'))
-                                  : ListView.separated(
-                                      itemCount: hasil.length,
-                                      separatorBuilder: (_, __) => const Divider(height: 1),
-                                      itemBuilder: (_, i) => itemDatabase(hasil[i]),
-                                    ),
+                          ? const Center(
+                              child: Text(
+                                'Ketik nama atau kode untuk mencari database.',
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : hasil.isEmpty
+                          ? const Center(child: Text('Data tidak ditemukan'))
+                          : ListView.separated(
+                              itemCount: hasil.length,
+                              separatorBuilder: (_, __) =>
+                                  const Divider(height: 1),
+                              itemBuilder: (_, i) => itemDatabase(hasil[i]),
+                            ),
                     ),
                   ],
                 ),
@@ -2216,12 +2285,18 @@ Terima kasih.
     final tipe = TextEditingController(text: item?.tipeKendaraan ?? '');
     final kode = TextEditingController(text: item?.kode ?? '');
     final nama = TextEditingController(text: item?.nama ?? '');
-    final harga = TextEditingController(text: item == null ? '' : item.harga.toString());
+    final harga = TextEditingController(
+      text: item == null ? '' : item.harga.toString(),
+    );
 
     await showDialog<void>(
       context: context,
       builder: (dc) => AlertDialog(
-        title: Text(item == null ? (tab == 0 ? 'Tambah Jasa' : 'Tambah Item') : 'Edit Item'),
+        title: Text(
+          item == null
+              ? (tab == 0 ? 'Tambah Jasa' : 'Tambah Item')
+              : 'Edit Item',
+        ),
         content: SizedBox(
           width: MediaQuery.sizeOf(context).width < 600
               ? MediaQuery.sizeOf(context).width * 0.82
@@ -2241,27 +2316,40 @@ Terima kasih.
                   ),
                 if (tab != 2) const SizedBox(height: 10),
                 if (tab != 0)
-                  TextField(controller: kode, decoration: const InputDecoration(labelText: 'Kode')),
+                  TextField(
+                    controller: kode,
+                    decoration: const InputDecoration(labelText: 'Kode'),
+                  ),
                 if (tab != 0) const SizedBox(height: 10),
                 TextField(
                   controller: nama,
-                  decoration: InputDecoration(labelText: tab == 0 ? 'Nama Jasa' : 'Nama Item'),
+                  decoration: InputDecoration(
+                    labelText: tab == 0 ? 'Nama Jasa' : 'Nama Item',
+                  ),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: harga,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Harga', prefixText: 'Rp '),
+                  decoration: const InputDecoration(
+                    labelText: 'Harga',
+                    prefixText: 'Rp ',
+                  ),
                 ),
               ],
             ),
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dc), child: const Text('Batal')),
+          TextButton(
+            onPressed: () => Navigator.pop(dc),
+            child: const Text('Batal'),
+          ),
           FilledButton(
             onPressed: () async {
-              final h = int.tryParse(harga.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+              final h =
+                  int.tryParse(harga.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
+                  0;
               if (nama.text.trim().isEmpty || h <= 0) return;
               if (tab != 0 && kode.text.trim().isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -2270,7 +2358,11 @@ Terima kasih.
                 return;
               }
 
-              final sumber = tab == 0 ? jasaDatabase : tab == 1 ? spareParts : bahan;
+              final sumber = tab == 0
+                  ? jasaDatabase
+                  : tab == 1
+                  ? spareParts
+                  : bahan;
               final baru = DatabaseItem(
                 kode: kode.text.trim(),
                 nama: nama.text.trim(),
@@ -2316,8 +2408,23 @@ Terima kasih.
 
   void bukaPencarianJasa() {
     final tipe = tipeKendaraanController.text.trim();
-    if (tipe.isEmpty) { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Pilih Tipe Kendaraan pada Data Customer terlebih dahulu'))); return; }
-    final hasil = jasaDatabase.where((e) => e.tipeKendaraan.trim().isEmpty || e.tipeKendaraan.trim().toLowerCase() == tipe.toLowerCase()).toList();
+    if (tipe.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Pilih Tipe Kendaraan pada Data Customer terlebih dahulu',
+          ),
+        ),
+      );
+      return;
+    }
+    final hasil = jasaDatabase
+        .where(
+          (e) =>
+              e.tipeKendaraan.trim().isEmpty ||
+              e.tipeKendaraan.trim().toLowerCase() == tipe.toLowerCase(),
+        )
+        .toList();
     bukaPencarian('Cari Jasa • $tipe', hasil, KategoriEstimasi.jasa);
   }
 
@@ -2361,9 +2468,9 @@ Terima kasih.
 
   Future<void> simpanEstimasiFavorit() async {
     if (itemEstimasi.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Estimasi masih kosong')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Estimasi masih kosong')));
       return;
     }
 
@@ -2412,8 +2519,11 @@ Terima kasih.
       'nama': namaFavorit.trim(),
       'dibuat': DateTime.now().toIso8601String(),
       'customer': {
-        'nama': namaCustomerController.text.trim(), 'noPolisi': noPolisiController.text.trim(),
-        'noTelepon': noTeleponController.text.trim(), 'kilometer': kilometerController.text.trim(), 'tipeKendaraan': tipeKendaraanController.text.trim(),
+        'nama': namaCustomerController.text.trim(),
+        'noPolisi': noPolisiController.text.trim(),
+        'noTelepon': noTeleponController.text.trim(),
+        'kilometer': kilometerController.text.trim(),
+        'tipeKendaraan': tipeKendaraanController.text.trim(),
         'noRangka': noRangkaController.text.trim(),
       },
       'diskonAkhirJasaPersen': diskonAkhirJasaPersen,
@@ -2424,14 +2534,15 @@ Terima kasih.
     };
 
     final indexNama = favorit.indexWhere(
-      (e) => (e['nama'] ?? '').toString().toLowerCase() ==
+      (e) =>
+          (e['nama'] ?? '').toString().toLowerCase() ==
           namaFavorit.trim().toLowerCase(),
     );
 
     if (!mounted) return;
 
     if (indexNama >= 0) {
-      final ganti = await showDialog<bool>(  
+      final ganti = await showDialog<bool>(
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: const Text('Nama favorit sudah ada'),
@@ -2464,10 +2575,18 @@ Terima kasih.
     );
   }
 
-  int _hargaTerbaru(String kode, String nama, KategoriEstimasi kategori, int hargaLama, [String tipe = '']) {
+  int _hargaTerbaru(
+    String kode,
+    String nama,
+    KategoriEstimasi kategori,
+    int hargaLama, [
+    String tipe = '',
+  ]) {
     if (kategori == KategoriEstimasi.jasa) {
       for (final data in jasaDatabase) {
-        if (data.nama.toLowerCase() == nama.toLowerCase() && data.tipeKendaraan.toLowerCase() == tipe.toLowerCase()) return data.harga;
+        if (data.nama.toLowerCase() == nama.toLowerCase() &&
+            data.tipeKendaraan.toLowerCase() == tipe.toLowerCase())
+          return data.harga;
       }
       return hargaLama;
     }
@@ -2526,13 +2645,16 @@ Terima kasih.
       );
     }
 
-    final customer = favorit['customer'] is Map ? Map<String,dynamic>.from(favorit['customer']) : <String,dynamic>{};
+    final customer = favorit['customer'] is Map
+        ? Map<String, dynamic>.from(favorit['customer'])
+        : <String, dynamic>{};
     setState(() {
       namaCustomerController.text = (customer['nama'] ?? '').toString();
       noPolisiController.text = (customer['noPolisi'] ?? '').toString();
       noTeleponController.text = (customer['noTelepon'] ?? '').toString();
       kilometerController.text = (customer['kilometer'] ?? '').toString();
-      tipeKendaraanController.text = (customer['tipeKendaraan'] ?? '').toString();
+      tipeKendaraanController.text = (customer['tipeKendaraan'] ?? '')
+          .toString();
       noRangkaController.text = (customer['noRangka'] ?? '').toString();
       itemEstimasi
         ..clear()
@@ -2673,8 +2795,18 @@ Terima kasih.
 
   String _tanggalIndonesia(DateTime date) {
     const bulan = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     return '${date.day} ${bulan[date.month - 1]} ${date.year}';
   }
@@ -2693,16 +2825,37 @@ Terima kasih.
     return '$aman.pdf';
   }
 
-  pw.Widget _pdfInfoRow(String kiriLabel, String kiriValue,
-      String kananLabel, String kananValue) {
+  pw.Widget _pdfInfoRow(
+    String kiriLabel,
+    String kiriValue,
+    String kananLabel,
+    String kananValue,
+  ) {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 1.5),
       child: pw.Row(
         children: [
-          pw.SizedBox(width: 85, child: pw.Text(kiriLabel, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8))),
-          pw.Expanded(child: pw.Text(kiriValue, style: const pw.TextStyle(fontSize: 8))),
-          pw.SizedBox(width: 78, child: pw.Text(kananLabel, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8))),
-          pw.SizedBox(width: 105, child: pw.Text(kananValue, style: const pw.TextStyle(fontSize: 8))),
+          pw.SizedBox(
+            width: 85,
+            child: pw.Text(
+              kiriLabel,
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8),
+            ),
+          ),
+          pw.Expanded(
+            child: pw.Text(kiriValue, style: const pw.TextStyle(fontSize: 8)),
+          ),
+          pw.SizedBox(
+            width: 78,
+            child: pw.Text(
+              kananLabel,
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8),
+            ),
+          ),
+          pw.SizedBox(
+            width: 105,
+            child: pw.Text(kananValue, style: const pw.TextStyle(fontSize: 8)),
+          ),
         ],
       ),
     );
@@ -2747,7 +2900,10 @@ Terima kasih.
           pw.TableRow(
             children: [
               _pdfCell(''),
-              _pdfCell('Diskon item ${formatQty(item.diskonPersen)}%', italic: true),
+              _pdfCell(
+                'Diskon item ${formatQty(item.diskonPersen)}%',
+                italic: true,
+              ),
               _pdfCell(''),
               _pdfCell(''),
               _pdfCell('-${_formatIdrPdf(item.nominalDiskon)}', italic: true),
@@ -2758,9 +2914,17 @@ Terima kasih.
     }
 
     if (items.isEmpty) {
-      rows.add(pw.TableRow(children: [
-        _pdfCell('1', center: true), _pdfCell('-'), _pdfCell('-', center: true), _pdfCell('IDR -'), _pdfCell('IDR -')
-      ]));
+      rows.add(
+        pw.TableRow(
+          children: [
+            _pdfCell('1', center: true),
+            _pdfCell('-'),
+            _pdfCell('-', center: true),
+            _pdfCell('IDR -'),
+            _pdfCell('IDR -'),
+          ],
+        ),
+      );
     }
 
     if (tampilkanDiskon && diskonAkhirPersen > 0) {
@@ -2768,7 +2932,10 @@ Terima kasih.
         pw.TableRow(
           children: [
             _pdfCell(''),
-            _pdfCell('Diskon Akhir ${formatQty(diskonAkhirPersen)}%', bold: true),
+            _pdfCell(
+              'Diskon Akhir ${formatQty(diskonAkhirPersen)}%',
+              bold: true,
+            ),
             _pdfCell(''),
             _pdfCell(''),
             _pdfCell(''),
@@ -2800,7 +2967,10 @@ Terima kasih.
             color: PdfColors.grey300,
             border: pw.Border.all(width: 0.6),
           ),
-          child: pw.Text(judul, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
+          child: pw.Text(
+            judul,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9),
+          ),
         ),
         pw.Table(
           border: pw.TableBorder.all(width: 0.45),
@@ -2817,7 +2987,12 @@ Terima kasih.
     );
   }
 
-  pw.Widget _pdfCell(String text, {bool bold = false, bool center = false, bool italic = false}) {
+  pw.Widget _pdfCell(
+    String text, {
+    bool bold = false,
+    bool center = false,
+    bool italic = false,
+  }) {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(horizontal: 3, vertical: 2.2),
       child: pw.Text(
@@ -2835,7 +3010,9 @@ Terima kasih.
   Future<void> buatPdfEstimasi() async {
     if (itemEstimasi.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tambahkan item estimasi terlebih dahulu')),
+        const SnackBar(
+          content: Text('Tambahkan item estimasi terlebih dahulu'),
+        ),
       );
       return;
     }
@@ -2856,7 +3033,10 @@ Terima kasih.
               child: pw.Text(
                 'PT. ASTRA INTERNATIONAL Tbk, Jln. Veteran No. 57, RT.02 / RW.02, Ciseureuh, Purwakarta',
                 textAlign: pw.TextAlign.center,
-                style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 8,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
             ),
             pw.SizedBox(height: 4),
@@ -2866,15 +3046,36 @@ Terima kasih.
               child: pw.Text(
                 'Estimasi Biaya Perawatan/Perbaikan',
                 textAlign: pw.TextAlign.center,
-                style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
             ),
             pw.SizedBox(height: 12),
-            pw.Text('Untuk kendaraan dengan data sebagai berikut :', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+            pw.Text(
+              'Untuk kendaraan dengan data sebagai berikut :',
+              style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+            ),
             pw.SizedBox(height: 7),
-            _pdfInfoRow('STNK atas Nama', namaCustomerController.text.trim(), 'Nomor Polisi', noPolisiController.text.trim()),
-            _pdfInfoRow('Cabang', 'PURWAKARTA', 'Tipe Kendaraan', tipeKendaraanController.text.trim()),
-            _pdfInfoRow('KILOMETER', kilometerController.text.trim(), 'No. Rangka', noRangkaController.text.trim()),
+            _pdfInfoRow(
+              'STNK atas Nama',
+              namaCustomerController.text.trim(),
+              'Nomor Polisi',
+              noPolisiController.text.trim(),
+            ),
+            _pdfInfoRow(
+              'Cabang',
+              'PURWAKARTA',
+              'Tipe Kendaraan',
+              tipeKendaraanController.text.trim(),
+            ),
+            _pdfInfoRow(
+              'KILOMETER',
+              kilometerController.text.trim(),
+              'No. Rangka',
+              noRangkaController.text.trim(),
+            ),
             pw.SizedBox(height: 7),
             _pdfKategori(
               judul: 'Jasa',
@@ -2902,41 +3103,105 @@ Terima kasih.
             pw.SizedBox(height: 7),
             if (tampilkanDiskon && diskonGrandPersen > 0)
               pw.Container(
-                padding: const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                padding: const pw.EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 3,
+                ),
                 decoration: pw.BoxDecoration(border: pw.Border.all(width: 0.5)),
-                child: pw.Row(children: [
-                  pw.Expanded(child: pw.Text('Diskon Grand Total (${formatQty(diskonGrandPersen)}%)', style: const pw.TextStyle(fontSize: 8))),
-                  pw.Text('-${_formatIdrPdf(diskonGrand)}', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-                ]),
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      child: pw.Text(
+                        'Diskon Grand Total (${formatQty(diskonGrandPersen)}%)',
+                        style: const pw.TextStyle(fontSize: 8),
+                      ),
+                    ),
+                    pw.Text(
+                      '-${_formatIdrPdf(diskonGrand)}',
+                      style: pw.TextStyle(
+                        fontSize: 8,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             pw.Container(
-              padding: const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+              padding: const pw.EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 4,
+              ),
               decoration: pw.BoxDecoration(
                 color: PdfColors.yellow,
                 border: pw.Border.all(width: 0.7),
               ),
-              child: pw.Row(children: [
-                pw.Expanded(child: pw.Text('GRAND TOTAL', textAlign: pw.TextAlign.center, style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold))),
-                pw.SizedBox(width: 145, child: pw.Text(_formatIdrPdf(grandTotal), textAlign: pw.TextAlign.right, style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold))),
-              ]),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Text(
+                      'GRAND TOTAL',
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(
+                        fontSize: 9,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(
+                    width: 145,
+                    child: pw.Text(
+                      _formatIdrPdf(grandTotal),
+                      textAlign: pw.TextAlign.right,
+                      style: pw.TextStyle(
+                        fontSize: 9,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             pw.SizedBox(height: 6),
             pw.Text('Keterangan :', style: const pw.TextStyle(fontSize: 8)),
             pw.SizedBox(height: 6),
-            pw.Text('1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('2. Estimasi biaya ini bukan bukti pembayaran', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('3. Harga sudah termasuk PPN', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text.trim()} - ${namaBankController.text.trim()} : ${nomorRekeningController.text.trim()}', style: const pw.TextStyle(fontSize: 7.5)),
+            pw.Text(
+              '1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '2. Estimasi biaya ini bukan bukti pembayaran',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '3. Harga sudah termasuk PPN',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text.trim()} - ${namaBankController.text.trim()} : ${nomorRekeningController.text.trim()}',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
             pw.SizedBox(height: 8),
             pw.Align(
               alignment: pw.Alignment.centerRight,
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
-                  pw.Text('Purwakarta, ${_tanggalIndonesia(sekarang)}', style: const pw.TextStyle(fontSize: 8)),
+                  pw.Text(
+                    'Purwakarta, ${_tanggalIndonesia(sekarang)}',
+                    style: const pw.TextStyle(fontSize: 8),
+                  ),
                   pw.SizedBox(height: 28),
-                  pw.Text(namaServiceAdvisorController.text.trim(), style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-                  pw.Text('Telp/WA : ${noWaServiceAdvisorController.text.trim()}', style: const pw.TextStyle(fontSize: 8)),
+                  pw.Text(
+                    namaServiceAdvisorController.text.trim(),
+                    style: pw.TextStyle(
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.Text(
+                    'Telp/WA : ${noWaServiceAdvisorController.text.trim()}',
+                    style: const pw.TextStyle(fontSize: 8),
+                  ),
                 ],
               ),
             ),
@@ -2948,9 +3213,9 @@ Terima kasih.
       await Printing.sharePdf(bytes: bytes, filename: _namaFilePdf());
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal membuat PDF: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal membuat PDF: $e')));
     }
   }
 
@@ -2972,12 +3237,16 @@ Terima kasih.
         playSound: true,
       );
       await _localNotifications
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
 
       final token = await messaging.getToken();
       if (token == null || token.isEmpty) {
-        throw Exception('FCM token kosong. Pastikan Google Play Services/Firebase aktif.');
+        throw Exception(
+          'FCM token kosong. Pastikan Google Play Services/Firebase aktif.',
+        );
       }
 
       await Supabase.instance.client.from('eco_devices').upsert({
@@ -2987,7 +3256,9 @@ Terima kasih.
         'platform': 'android',
       }, onConflict: 'fcm_token');
 
-      debugPrint('FCM SA BERHASIL: ${token.substring(0, token.length > 20 ? 20 : token.length)}...');
+      debugPrint(
+        'FCM SA BERHASIL: ${token.substring(0, token.length > 20 ? 20 : token.length)}...',
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -2998,22 +3269,22 @@ Terima kasih.
       }
 
       messaging.onTokenRefresh.listen((tokenBaru) async {
-  try {
-    await Supabase.instance.client.from('eco_devices').upsert({
-      'role': 'sa',
-      'sa_id': _saIdAktif,
-      'fcm_token': tokenBaru,
-      'platform': 'android',
-    }, onConflict: 'fcm_token');
+        try {
+          await Supabase.instance.client.from('eco_devices').upsert({
+            'role': 'sa',
+            'sa_id': _saIdAktif,
+            'fcm_token': tokenBaru,
+            'platform': 'android',
+          }, onConflict: 'fcm_token');
 
-    debugPrint(
-      'TOKEN SA DIPERBARUI • $_saIdAktif • '
-      '${tokenBaru.substring(0, tokenBaru.length > 20 ? 20 : tokenBaru.length)}...',
-    );
-  } catch (e) {
-    debugPrint('SIMPAN TOKEN SA ERROR: $e');
-  }
-});
+          debugPrint(
+            'TOKEN SA DIPERBARUI • $_saIdAktif • '
+            '${tokenBaru.substring(0, tokenBaru.length > 20 ? 20 : tokenBaru.length)}...',
+          );
+        } catch (e) {
+          debugPrint('SIMPAN TOKEN SA ERROR: $e');
+        }
+      });
 
       FirebaseMessaging.onMessage.listen((message) async {
         const details = NotificationDetails(
@@ -3103,10 +3374,12 @@ Terima kasih.
           final rawBahan = finding['estimasi_bahan'];
           final partKosong = rawPart is! List || rawPart.isEmpty;
           final bahanKosong = rawBahan is! List || rawBahan.isEmpty;
-          final hargaPart = (finding['harga_part'] as num?)?.toDouble() ??
+          final hargaPart =
+              (finding['harga_part'] as num?)?.toDouble() ??
               double.tryParse((finding['harga_part'] ?? '0').toString()) ??
               0;
-          final qty = (finding['quantity'] as num?)?.toDouble() ??
+          final qty =
+              (finding['quantity'] as num?)?.toDouble() ??
               double.tryParse((finding['quantity'] ?? '1').toString()) ??
               1;
 
@@ -3118,12 +3391,13 @@ Terima kasih.
                 'harga': hargaPart,
                 'qty': qty,
                 'diskon': 0,
-              }
+              },
             ];
           }
 
           final rawJasa = finding['estimasi_jasa'];
-          final hargaJasa = (finding['harga_jasa'] as num?)?.toDouble() ??
+          final hargaJasa =
+              (finding['harga_jasa'] as num?)?.toDouble() ??
               double.tryParse((finding['harga_jasa'] ?? '0').toString()) ??
               0;
           if ((rawJasa is! List || rawJasa.isEmpty) && hargaJasa > 0) {
@@ -3134,13 +3408,15 @@ Terima kasih.
                 'harga': hargaJasa,
                 'qty': 1,
                 'diskon': 0,
-              }
+              },
             ];
           }
         }
         order['temuan'] = temuan;
         order['jumlahTemuan'] = temuan.length;
-        order['status'] = temuan.isEmpty ? 'Menunggu Temuan Teknisi' : 'Ada Temuan Teknisi';
+        order['status'] = temuan.isEmpty
+            ? 'Menunggu Temuan Teknisi'
+            : 'Ada Temuan Teknisi';
       }
       await _simpanEcoEstimasi();
       if (mounted) setState(() {});
@@ -3221,7 +3497,9 @@ Terima kasih.
                         Text('Kode: ${partTerpilih!.kode}'),
                         if (partTerpilih!.tipeKendaraan.isNotEmpty)
                           Text('Tipe: ${partTerpilih!.tipeKendaraan}'),
-                        Text('Harga: ${rupiah(partTerpilih!.harga.toDouble())}'),
+                        Text(
+                          'Harga: ${rupiah(partTerpilih!.harga.toDouble())}',
+                        ),
                       ],
                     ),
                   ),
@@ -3229,41 +3507,45 @@ Terima kasih.
                   child: loadingCari
                       ? const Center(child: CircularProgressIndicator())
                       : hasilCari.isEmpty
-                          ? const Center(
-                              child: Text(
-                                'Ketik nama atau kode part untuk mencari master Spare Part.',
-                                textAlign: TextAlign.center,
+                      ? const Center(
+                          child: Text(
+                            'Ketik nama atau kode part untuk mencari master Spare Part.',
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: hasilCari.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (_, i) {
+                            final item = hasilCari[i];
+                            final dipilih =
+                                partTerpilih?.kode == item.kode &&
+                                partTerpilih?.tipeKendaraan ==
+                                    item.tipeKendaraan;
+                            return ListTile(
+                              selected: dipilih,
+                              leading: Icon(
+                                dipilih
+                                    ? Icons.check_circle
+                                    : Icons.settings_outlined,
+                                color: dipilih ? biruUtama : null,
                               ),
-                            )
-                          : ListView.separated(
-                              itemCount: hasilCari.length,
-                              separatorBuilder: (_, __) => const Divider(height: 1),
-                              itemBuilder: (_, i) {
-                                final item = hasilCari[i];
-                                final dipilih = partTerpilih?.kode == item.kode &&
-                                    partTerpilih?.tipeKendaraan == item.tipeKendaraan;
-                                return ListTile(
-                                  selected: dipilih,
-                                  leading: Icon(
-                                    dipilih
-                                        ? Icons.check_circle
-                                        : Icons.settings_outlined,
-                                    color: dipilih ? biruUtama : null,
-                                  ),
-                                  title: Text(
-                                    item.nama,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                  subtitle: Text(
-                                    item.tipeKendaraan.isEmpty
-                                        ? 'Kode: ${item.kode}'
-                                        : 'Kode: ${item.kode} • Tipe: ${item.tipeKendaraan}',
-                                  ),
-                                  trailing: Text(rupiah(item.harga.toDouble())),
-                                  onTap: () => setD(() => partTerpilih = item),
-                                );
-                              },
-                            ),
+                              title: Text(
+                                item.nama,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              subtitle: Text(
+                                item.tipeKendaraan.isEmpty
+                                    ? 'Kode: ${item.kode}'
+                                    : 'Kode: ${item.kode} • Tipe: ${item.tipeKendaraan}',
+                              ),
+                              trailing: Text(rupiah(item.harga.toDouble())),
+                              onTap: () => setD(() => partTerpilih = item),
+                            );
+                          },
+                        ),
                 ),
               ],
             ),
@@ -3277,10 +3559,10 @@ Terima kasih.
               onPressed: partTerpilih == null
                   ? null
                   : () => Navigator.pop(dc, {
-                        'kode_part': partTerpilih!.kode,
-                        'nama_part': partTerpilih!.nama,
-                        'harga_part': partTerpilih!.harga,
-                      }),
+                      'kode_part': partTerpilih!.kode,
+                      'nama_part': partTerpilih!.nama,
+                      'harga_part': partTerpilih!.harga,
+                    }),
               child: const Text('Pilih & Simpan'),
             ),
           ],
@@ -3292,20 +3574,22 @@ Terima kasih.
     final id = finding['id'];
     if (id == null) return;
     try {
-      await Supabase.instance.client.from('eco_findings').update({
-        ...hasil,
-        'harga_diisi_oleh': 'sa',
-      }).eq('id', id);
+      await Supabase.instance.client
+          .from('eco_findings')
+          .update({...hasil, 'harga_diisi_oleh': 'sa'})
+          .eq('id', id);
       await _sinkronTemuanCloud();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Spare Part master berhasil dipilih oleh SA')),
+        const SnackBar(
+          content: Text('Spare Part master berhasil dipilih oleh SA'),
+        ),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menyimpan data part: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal menyimpan data part: $e')));
     }
   }
 
@@ -3322,7 +3606,9 @@ Terima kasih.
       if (decoded is List) {
         ecoEstimasi
           ..clear()
-          ..addAll(decoded.whereType<Map>().map((e) => Map<String, dynamic>.from(e)));
+          ..addAll(
+            decoded.whereType<Map>().map((e) => Map<String, dynamic>.from(e)),
+          );
         if (mounted) setState(() {});
       }
     } catch (_) {}
@@ -3341,7 +3627,12 @@ Terima kasih.
     final rangka = noRangkaController.text.trim();
     final sa = namaServiceAdvisorController.text.trim();
 
-    if (nama.isEmpty || nopol.isEmpty || noTelepon.isEmpty || tipe.isEmpty || rangka.isEmpty || sa.isEmpty) {
+    if (nama.isEmpty ||
+        nopol.isEmpty ||
+        noTelepon.isEmpty ||
+        tipe.isEmpty ||
+        rangka.isEmpty ||
+        sa.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -3368,7 +3659,9 @@ Terima kasih.
           .single();
 
       final data = <String, dynamic>{
-        'id': inserted['id']?.toString() ?? DateTime.now().microsecondsSinceEpoch.toString(),
+        'id':
+            inserted['id']?.toString() ??
+            DateTime.now().microsecondsSinceEpoch.toString(),
         'namaCustomer': nama,
         'noPolisi': nopol,
         'noTelepon': noTelepon,
@@ -3376,7 +3669,9 @@ Terima kasih.
         'noRangka': rangka,
         'namaSa': sa,
         'saId': _saIdAktif,
-        'dibuat': inserted['created_at']?.toString() ?? DateTime.now().toIso8601String(),
+        'dibuat':
+            inserted['created_at']?.toString() ??
+            DateTime.now().toIso8601String(),
         'jumlahTemuan': 0,
         'status': 'Menunggu Temuan Teknisi',
         'temuan': <Map<String, dynamic>>[],
@@ -3400,11 +3695,16 @@ Terima kasih.
     }
   }
 
-
-  List<Map<String, dynamic>> _temuanList(Map<String, dynamic> finding, String key) {
+  List<Map<String, dynamic>> _temuanList(
+    Map<String, dynamic> finding,
+    String key,
+  ) {
     final raw = finding[key];
     if (raw is List) {
-      return raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+      return raw
+          .whereType<Map>()
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     }
     return <Map<String, dynamic>>[];
   }
@@ -3432,11 +3732,13 @@ Terima kasih.
       context: context,
       builder: (dc) => StatefulBuilder(
         builder: (context, setD) => AlertDialog(
-          title: Text(kategori == KategoriEstimasi.jasa
-              ? 'Cari Jasa'
-              : kategori == KategoriEstimasi.sparePart
-                  ? 'Cari Spare Part'
-                  : 'Cari Bahan'),
+          title: Text(
+            kategori == KategoriEstimasi.jasa
+                ? 'Cari Jasa'
+                : kategori == KategoriEstimasi.sparePart
+                ? 'Cari Spare Part'
+                : 'Cari Bahan',
+          ),
           content: SizedBox(
             width: 620,
             height: 520,
@@ -3452,23 +3754,37 @@ Terima kasih.
                     final my = ++serial;
                     final q = value.trim().toLowerCase();
                     if (q.isEmpty) {
-                      setD(() { hasil = []; loading = false; });
+                      setD(() {
+                        hasil = [];
+                        loading = false;
+                      });
                       return;
                     }
                     setD(() => loading = true);
                     List<DatabaseItem> data;
                     if (kategori == KategoriEstimasi.jasa) {
-                      final tipe = tipeKendaraanController.text.trim().toLowerCase();
-                      data = jasaDatabase.where((e) {
-                        final cocok = e.kode.toLowerCase().contains(q) || e.nama.toLowerCase().contains(q);
-                        final et = e.tipeKendaraan.trim().toLowerCase();
-                        return cocok && (et.isEmpty || tipe.isEmpty || et == tipe);
-                      }).take(50).toList();
+                      final tipe = tipeKendaraanController.text
+                          .trim()
+                          .toLowerCase();
+                      data = jasaDatabase
+                          .where((e) {
+                            final cocok =
+                                e.kode.toLowerCase().contains(q) ||
+                                e.nama.toLowerCase().contains(q);
+                            final et = e.tipeKendaraan.trim().toLowerCase();
+                            return cocok &&
+                                (et.isEmpty || tipe.isEmpty || et == tipe);
+                          })
+                          .take(50)
+                          .toList();
                     } else {
                       data = await _cariMasterLokal(kategori, value);
                     }
                     if (!dc.mounted || my != serial) return;
-                    setD(() { hasil = data; loading = false; });
+                    setD(() {
+                      hasil = data;
+                      loading = false;
+                    });
                   },
                 ),
                 const SizedBox(height: 10),
@@ -3481,11 +3797,19 @@ Terima kasih.
                           itemBuilder: (_, i) {
                             final e = hasil[i];
                             return ListTile(
-                              title: Text(e.nama, style: const TextStyle(fontWeight: FontWeight.w600)),
-                              subtitle: Text([
-                                if (e.kode.isNotEmpty) 'Kode: ${e.kode}',
-                                if (e.tipeKendaraan.isNotEmpty) 'Tipe: ${e.tipeKendaraan}',
-                              ].join(' • ')),
+                              title: Text(
+                                e.nama,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              subtitle: Text(
+                                [
+                                  if (e.kode.isNotEmpty) 'Kode: ${e.kode}',
+                                  if (e.tipeKendaraan.isNotEmpty)
+                                    'Tipe: ${e.tipeKendaraan}',
+                                ].join(' • '),
+                              ),
                               trailing: Text(rupiah(e.harga.toDouble())),
                               onTap: () => Navigator.pop(dc, e),
                             );
@@ -3495,7 +3819,12 @@ Terima kasih.
               ],
             ),
           ),
-          actions: [TextButton(onPressed: () => Navigator.pop(dc), child: const Text('Batal'))],
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dc),
+              child: const Text('Batal'),
+            ),
+          ],
         ),
       ),
     );
@@ -3514,35 +3843,50 @@ Terima kasih.
       context: context,
       builder: (dc) => AlertDialog(
         title: Text(master.nama),
-        content: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text('Harga: ${rupiah(master.harga.toDouble())}'),
-          const SizedBox(height: 12),
-          TextField(
-            controller: qtyC,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(labelText: 'Quantity'),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: diskonC,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(labelText: 'Diskon (%)'),
-          ),
-        ]),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Harga: ${rupiah(master.harga.toDouble())}'),
+            const SizedBox(height: 12),
+            TextField(
+              controller: qtyC,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(labelText: 'Quantity'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: diskonC,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(labelText: 'Diskon (%)'),
+            ),
+          ],
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dc, false), child: const Text('Batal')),
-          FilledButton(onPressed: () => Navigator.pop(dc, true), child: const Text('Tambah')),
+          TextButton(
+            onPressed: () => Navigator.pop(dc, false),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dc, true),
+            child: const Text('Tambah'),
+          ),
         ],
       ),
     );
     if (ok != true) return;
-    setD(() => target.add({
-      'kode': master.kode,
-      'nama': master.nama,
-      'harga': master.harga,
-      'qty': double.tryParse(qtyC.text.replaceAll(',', '.')) ?? 1,
-      'diskon': double.tryParse(diskonC.text.replaceAll(',', '.')) ?? 0,
-    }));
+    setD(
+      () => target.add({
+        'kode': master.kode,
+        'nama': master.nama,
+        'harga': master.harga,
+        'qty': double.tryParse(qtyC.text.replaceAll(',', '.')) ?? 1,
+        'diskon': double.tryParse(diskonC.text.replaceAll(',', '.')) ?? 0,
+      }),
+    );
     qtyC.dispose();
     diskonC.dispose();
   }
@@ -3560,55 +3904,82 @@ Terima kasih.
       color: Colors.grey.shade50,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Row(children: [
-            Icon(icon, color: biruUtama),
-            const SizedBox(width: 8),
-            Expanded(child: Text(judul, style: const TextStyle(fontWeight: FontWeight.bold))),
-            IconButton(
-              tooltip: 'Tambah $judul',
-              onPressed: () => _editItemTemuan(items, kategori, setD),
-              icon: const Icon(Icons.add_circle_outline, color: biruUtama),
-            ),
-          ]),
-          if (items.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text('Belum ada item', style: TextStyle(color: Colors.grey)),
-            )
-          else
-            ...List.generate(items.length, (i) {
-              final e = items[i];
-              final qty = _angkaTemuan(e['qty']);
-              final diskon = _angkaTemuan(e['diskon']);
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text((e['nama'] ?? '-').toString()),
-                subtitle: Text(
-                  '${e['kode'] ?? ''}\nQty ${formatQty(qty)} × ${rupiah(_angkaTemuan(e['harga']))}'
-                  '${tampilDiskon && diskon > 0 ? ' • Diskon ${formatQty(diskon)}%' : ''}',
-                ),
-                trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text(rupiah(_totalItemTemuan(e)), style: const TextStyle(fontWeight: FontWeight.w600)),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: () => setD(() => items.removeAt(i)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: biruUtama),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    judul,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ]),
-              );
-            }),
-          const Divider(),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text('Total $judul: ${rupiah(_totalKategoriTemuan(items))}',
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ]),
+                ),
+                IconButton(
+                  tooltip: 'Tambah $judul',
+                  onPressed: () => _editItemTemuan(items, kategori, setD),
+                  icon: const Icon(Icons.add_circle_outline, color: biruUtama),
+                ),
+              ],
+            ),
+            if (items.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  'Belum ada item',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              )
+            else
+              ...List.generate(items.length, (i) {
+                final e = items[i];
+                final qty = _angkaTemuan(e['qty']);
+                final diskon = _angkaTemuan(e['diskon']);
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text((e['nama'] ?? '-').toString()),
+                  subtitle: Text(
+                    '${e['kode'] ?? ''}\nQty ${formatQty(qty)} × ${rupiah(_angkaTemuan(e['harga']))}'
+                    '${tampilDiskon && diskon > 0 ? ' • Diskon ${formatQty(diskon)}%' : ''}',
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        rupiah(_totalItemTemuan(e)),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.red,
+                        ),
+                        onPressed: () => setD(() => items.removeAt(i)),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            const Divider(),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Total $judul: ${rupiah(_totalKategoriTemuan(items))}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _bukaEditorTemuan(Map<String, dynamic> order, Map<String, dynamic> finding) async {
+  Future<void> _bukaEditorTemuan(
+    Map<String, dynamic> order,
+    Map<String, dynamic> finding,
+  ) async {
     final jasa = _temuanList(finding, 'estimasi_jasa');
     final part = _temuanList(finding, 'estimasi_sparepart');
     final bahan = _temuanList(finding, 'estimasi_bahan');
@@ -3618,44 +3989,110 @@ Terima kasih.
       context: context,
       builder: (dc) => StatefulBuilder(
         builder: (context, setD) {
-          final grand = _totalKategoriTemuan(jasa) + _totalKategoriTemuan(part) + _totalKategoriTemuan(bahan);
-          final foto = (finding['foto_url'] ?? finding['photo_url'] ?? finding['foto'] ?? '').toString();
-          final ket = (finding['kondisi'] ?? finding['keterangan'] ?? finding['deskripsi'] ?? '-').toString();
+          final grand =
+              _totalKategoriTemuan(jasa) +
+              _totalKategoriTemuan(part) +
+              _totalKategoriTemuan(bahan);
+          final foto =
+              (finding['foto_url'] ??
+                      finding['photo_url'] ??
+                      finding['foto'] ??
+                      '')
+                  .toString();
+          final ket =
+              (finding['kondisi'] ??
+                      finding['keterangan'] ??
+                      finding['deskripsi'] ??
+                      '-')
+                  .toString();
           return AlertDialog(
             insetPadding: const EdgeInsets.all(12),
-            title: Row(children: [
-              const Expanded(child: Text('Estimasi Temuan')),
-              IconButton(
-                tooltip: tampilDiskonTemuan ? 'Sembunyikan diskon' : 'Tampilkan diskon',
-                onPressed: () => setD(() => tampilDiskonTemuan = !tampilDiskonTemuan),
-                icon: Icon(tampilDiskonTemuan ? Icons.visibility : Icons.visibility_off),
-              ),
-            ]),
+            title: Row(
+              children: [
+                const Expanded(child: Text('Estimasi Temuan')),
+                IconButton(
+                  tooltip: tampilDiskonTemuan
+                      ? 'Sembunyikan diskon'
+                      : 'Tampilkan diskon',
+                  onPressed: () =>
+                      setD(() => tampilDiskonTemuan = !tampilDiskonTemuan),
+                  icon: Icon(
+                    tampilDiskonTemuan
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                ),
+              ],
+            ),
             content: SizedBox(
               width: 760,
               height: MediaQuery.sizeOf(context).height * .78,
-              child: ListView(children: [
-                if (foto.isNotEmpty)
-                  _fotoTemuanWidget(foto, height: 230),
-                const SizedBox(height: 10),
-                Text(ket, style: const TextStyle(fontWeight: FontWeight.w600)),
-                const SizedBox(height: 12),
-                _editorKategoriTemuan('Jasa', Icons.build_outlined, jasa, KategoriEstimasi.jasa, tampilDiskonTemuan, setD),
-                _editorKategoriTemuan('Spare Part', Icons.settings_outlined, part, KategoriEstimasi.sparePart, tampilDiskonTemuan, setD),
-                _editorKategoriTemuan('Bahan', Icons.water_drop_outlined, bahan, KategoriEstimasi.bahan, tampilDiskonTemuan, setD),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: biruMuda, borderRadius: BorderRadius.circular(10)),
-                  child: Row(children: [
-                    const Expanded(child: Text('GRAND TOTAL TEMUAN', style: TextStyle(fontWeight: FontWeight.bold))),
-                    Text(rupiah(grand), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  ]),
-                ),
-              ]),
+              child: ListView(
+                children: [
+                  if (foto.isNotEmpty) _fotoTemuanWidget(foto, height: 230),
+                  const SizedBox(height: 10),
+                  Text(
+                    ket,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12),
+                  _editorKategoriTemuan(
+                    'Jasa',
+                    Icons.build_outlined,
+                    jasa,
+                    KategoriEstimasi.jasa,
+                    tampilDiskonTemuan,
+                    setD,
+                  ),
+                  _editorKategoriTemuan(
+                    'Spare Part',
+                    Icons.settings_outlined,
+                    part,
+                    KategoriEstimasi.sparePart,
+                    tampilDiskonTemuan,
+                    setD,
+                  ),
+                  _editorKategoriTemuan(
+                    'Bahan',
+                    Icons.water_drop_outlined,
+                    bahan,
+                    KategoriEstimasi.bahan,
+                    tampilDiskonTemuan,
+                    setD,
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: biruMuda,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'GRAND TOTAL TEMUAN',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          rupiah(grand),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(dc, false), child: const Text('Batal')),
+              TextButton(
+                onPressed: () => Navigator.pop(dc, false),
+                child: const Text('Batal'),
+              ),
               FilledButton.icon(
                 onPressed: () => Navigator.pop(dc, true),
                 icon: const Icon(Icons.save_outlined),
@@ -3668,26 +4105,34 @@ Terima kasih.
     );
     if (simpan != true) return;
     try {
-      await Supabase.instance.client.from('eco_findings').update({
-        'estimasi_jasa': jasa,
-        'estimasi_sparepart': part,
-        'estimasi_bahan': bahan,
-        'diskon_tampil': tampilDiskonTemuan,
-        'harga_diisi_oleh': 'sa',
-      }).eq('id', finding['id']);
+      await Supabase.instance.client
+          .from('eco_findings')
+          .update({
+            'estimasi_jasa': jasa,
+            'estimasi_sparepart': part,
+            'estimasi_bahan': bahan,
+            'diskon_tampil': tampilDiskonTemuan,
+            'harga_diisi_oleh': 'sa',
+          })
+          .eq('id', finding['id']);
       await _sinkronTemuanCloud();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Estimasi temuan berhasil disimpan')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Estimasi temuan berhasil disimpan')),
+      );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal menyimpan estimasi temuan: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan estimasi temuan: $e')),
+      );
     }
   }
 
   Future<String?> _urlFotoTemuan(String path) async {
     final value = path.trim();
     if (value.isEmpty || value == '-') return null;
-    if (value.startsWith('http://') || value.startsWith('https://')) return value;
+    if (value.startsWith('http://') || value.startsWith('https://'))
+      return value;
     try {
       return await Supabase.instance.client.storage
           .from('eco-findings')
@@ -3712,7 +4157,12 @@ Terima kasih.
         if (url == null || url.isEmpty) {
           return SizedBox(
             height: 80,
-            child: Center(child: Text('Foto tidak dapat dimuat', style: TextStyle(color: Colors.grey.shade700))),
+            child: Center(
+              child: Text(
+                'Foto tidak dapat dimuat',
+                style: TextStyle(color: Colors.grey.shade700),
+              ),
+            ),
           );
         }
         return ClipRRect(
@@ -3724,7 +4174,12 @@ Terima kasih.
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => SizedBox(
               height: 80,
-              child: Center(child: Text('Foto tidak dapat dimuat', style: TextStyle(color: Colors.grey.shade700))),
+              child: Center(
+                child: Text(
+                  'Foto tidak dapat dimuat',
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
+              ),
             ),
           ),
         );
@@ -3757,7 +4212,8 @@ Terima kasih.
       _kTemplateWaTemuan,
       value.isEmpty ? _templateWaTemuanDefault : value,
     );
-    if (value.isEmpty) templateWaTemuanController.text = _templateWaTemuanDefault;
+    if (value.isEmpty)
+      templateWaTemuanController.text = _templateWaTemuanDefault;
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Template pesan WhatsApp tersimpan')),
@@ -3832,7 +4288,8 @@ Terima kasih.
             child: const Text('Batal'),
           ),
           FilledButton.icon(
-            onPressed: () => Navigator.pop(dialogContext, controller.text.trim()),
+            onPressed: () =>
+                Navigator.pop(dialogContext, controller.text.trim()),
             icon: const Icon(Icons.share),
             label: const Text('Buka WhatsApp'),
           ),
@@ -3851,12 +4308,16 @@ Terima kasih.
     final nama = (order['namaCustomer'] ?? '').toString().trim();
     final nopol = (order['noPolisi'] ?? '').toString().trim();
     final tipe = (order['tipeKendaraan'] ?? '').toString().trim();
-    final sa = (order['namaSa'] ?? namaServiceAdvisorController.text).toString().trim();
+    final sa = (order['namaSa'] ?? namaServiceAdvisorController.text)
+        .toString()
+        .trim();
 
     final detail = <String>[];
     for (var i = 0; i < findings.length; i++) {
       final f = findings[i];
-      final kondisi = (f['kondisi'] ?? f['keterangan'] ?? f['deskripsi'] ?? '').toString().trim();
+      final kondisi = (f['kondisi'] ?? f['keterangan'] ?? f['deskripsi'] ?? '')
+          .toString()
+          .trim();
       if (kondisi.isNotEmpty && kondisi != '-') {
         detail.add('${i + 1}. $kondisi');
       }
@@ -3873,7 +4334,10 @@ Terima kasih.
         .replaceAll('{sa}', sa);
   }
 
-  Future<void> _buatPdfTemuan(Map<String, dynamic> order, List<Map<String, dynamic>> findings) async {
+  Future<void> _buatPdfTemuan(
+    Map<String, dynamic> order,
+    List<Map<String, dynamic>> findings,
+  ) async {
     if (findings.isEmpty) return;
 
     try {
@@ -3911,9 +4375,24 @@ Terima kasih.
       for (var fIndex = 0; fIndex < findings.length; fIndex++) {
         final f = findings[fIndex];
         if (f['diskon_tampil'] == true) tampilkanDiskonPdf = true;
-        tambahItem(_temuanList(f, 'estimasi_jasa'), jasaPdf, KategoriEstimasi.jasa, 'j$fIndex');
-        tambahItem(_temuanList(f, 'estimasi_sparepart'), partPdf, KategoriEstimasi.sparePart, 'p$fIndex');
-        tambahItem(_temuanList(f, 'estimasi_bahan'), bahanPdf, KategoriEstimasi.bahan, 'b$fIndex');
+        tambahItem(
+          _temuanList(f, 'estimasi_jasa'),
+          jasaPdf,
+          KategoriEstimasi.jasa,
+          'j$fIndex',
+        );
+        tambahItem(
+          _temuanList(f, 'estimasi_sparepart'),
+          partPdf,
+          KategoriEstimasi.sparePart,
+          'p$fIndex',
+        );
+        tambahItem(
+          _temuanList(f, 'estimasi_bahan'),
+          bahanPdf,
+          KategoriEstimasi.bahan,
+          'b$fIndex',
+        );
       }
 
       double totalPdf(List<ItemEstimasi> items) =>
@@ -3937,7 +4416,10 @@ Terima kasih.
               child: pw.Text(
                 'PT. ASTRA INTERNATIONAL Tbk, Jln. Veteran No. 57, RT.02 / RW.02, Ciseureuh, Purwakarta',
                 textAlign: pw.TextAlign.center,
-                style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 8,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
             ),
             pw.SizedBox(height: 4),
@@ -3947,19 +4429,36 @@ Terima kasih.
               child: pw.Text(
                 'Estimasi Biaya Perawatan/Perbaikan',
                 textAlign: pw.TextAlign.center,
-                style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
             ),
             pw.SizedBox(height: 12),
-            pw.Text('Untuk kendaraan dengan data sebagai berikut :',
-                style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+            pw.Text(
+              'Untuk kendaraan dengan data sebagai berikut :',
+              style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
+            ),
             pw.SizedBox(height: 7),
-            _pdfInfoRow('STNK atas Nama', (order['namaCustomer'] ?? '').toString(),
-                'Nomor Polisi', (order['noPolisi'] ?? '').toString()),
-            _pdfInfoRow('Cabang', 'PURWAKARTA',
-                'Tipe Kendaraan', (order['tipeKendaraan'] ?? '').toString()),
-            _pdfInfoRow('KILOMETER', kilometerController.text.trim(),
-                'No. Rangka', (order['noRangka'] ?? '').toString()),
+            _pdfInfoRow(
+              'STNK atas Nama',
+              (order['namaCustomer'] ?? '').toString(),
+              'Nomor Polisi',
+              (order['noPolisi'] ?? '').toString(),
+            ),
+            _pdfInfoRow(
+              'Cabang',
+              'PURWAKARTA',
+              'Tipe Kendaraan',
+              (order['tipeKendaraan'] ?? '').toString(),
+            ),
+            _pdfInfoRow(
+              'KILOMETER',
+              kilometerController.text.trim(),
+              'No. Rangka',
+              (order['noRangka'] ?? '').toString(),
+            ),
             pw.SizedBox(height: 7),
             _pdfKategoriTemuan(
               judul: 'Jasa',
@@ -3986,37 +4485,82 @@ Terima kasih.
             ),
             pw.SizedBox(height: 7),
             pw.Container(
-              padding: const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+              padding: const pw.EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 4,
+              ),
               decoration: pw.BoxDecoration(
                 color: PdfColors.yellow,
                 border: pw.Border.all(width: 0.7),
               ),
-              child: pw.Row(children: [
-                pw.Expanded(child: pw.Text('GRAND TOTAL', textAlign: pw.TextAlign.center,
-                    style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold))),
-                pw.SizedBox(width: 145, child: pw.Text(_formatIdrPdf(grandTotalPdf),
-                    textAlign: pw.TextAlign.right,
-                    style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold))),
-              ]),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Text(
+                      'GRAND TOTAL',
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(
+                        fontSize: 9,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(
+                    width: 145,
+                    child: pw.Text(
+                      _formatIdrPdf(grandTotalPdf),
+                      textAlign: pw.TextAlign.right,
+                      style: pw.TextStyle(
+                        fontSize: 9,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             pw.SizedBox(height: 6),
             pw.Text('Keterangan :', style: const pw.TextStyle(fontSize: 8)),
             pw.SizedBox(height: 6),
-            pw.Text('1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('2. Estimasi biaya ini bukan bukti pembayaran', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('3. Harga sudah termasuk PPN', style: const pw.TextStyle(fontSize: 7.5)),
-            pw.Text('4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text.trim()} - ${namaBankController.text.trim()} : ${nomorRekeningController.text.trim()}', style: const pw.TextStyle(fontSize: 7.5)),
+            pw.Text(
+              '1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '2. Estimasi biaya ini bukan bukti pembayaran',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '3. Harga sudah termasuk PPN',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
+            pw.Text(
+              '4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text.trim()} - ${namaBankController.text.trim()} : ${nomorRekeningController.text.trim()}',
+              style: const pw.TextStyle(fontSize: 7.5),
+            ),
             pw.SizedBox(height: 8),
             pw.Align(
               alignment: pw.Alignment.centerRight,
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
-                  pw.Text('Purwakarta, ${_tanggalIndonesia(sekarang)}', style: const pw.TextStyle(fontSize: 8)),
+                  pw.Text(
+                    'Purwakarta, ${_tanggalIndonesia(sekarang)}',
+                    style: const pw.TextStyle(fontSize: 8),
+                  ),
                   pw.SizedBox(height: 28),
-                  pw.Text((order['namaSa'] ?? namaServiceAdvisorController.text).toString(),
-                      style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-                  pw.Text('Telp/WA : ${noWaServiceAdvisorController.text.trim()}', style: const pw.TextStyle(fontSize: 8)),
+                  pw.Text(
+                    (order['namaSa'] ?? namaServiceAdvisorController.text)
+                        .toString(),
+                    style: pw.TextStyle(
+                      fontSize: 8,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.Text(
+                    'Telp/WA : ${noWaServiceAdvisorController.text.trim()}',
+                    style: const pw.TextStyle(fontSize: 8),
+                  ),
                 ],
               ),
             ),
@@ -4027,7 +4571,8 @@ Terima kasih.
       // Ambil foto untuk lampiran temuan.
       final fotoBytes = <String, Uint8List?>{};
       for (final f in findings) {
-        final u = (f['foto_url'] ?? f['photo_url'] ?? f['foto'] ?? '').toString();
+        final u = (f['foto_url'] ?? f['photo_url'] ?? f['foto'] ?? '')
+            .toString();
         if (u.isNotEmpty && !fotoBytes.containsKey(u)) {
           fotoBytes[u] = await _ambilFotoTemuan(u);
         }
@@ -4041,13 +4586,20 @@ Terima kasih.
           header: (_) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.stretch,
             children: [
-              pw.Text('Lampiran Temuan Pemeriksaan',
-                  textAlign: pw.TextAlign.center,
-                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
+              pw.Text(
+                'Lampiran Temuan Pemeriksaan',
+                textAlign: pw.TextAlign.center,
+                style: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
               pw.SizedBox(height: 3),
-              pw.Text('${(order['namaCustomer'] ?? '').toString()} • ${(order['noPolisi'] ?? '').toString()}',
-                  textAlign: pw.TextAlign.center,
-                  style: const pw.TextStyle(fontSize: 8)),
+              pw.Text(
+                '${(order['namaCustomer'] ?? '').toString()} • ${(order['noPolisi'] ?? '').toString()}',
+                textAlign: pw.TextAlign.center,
+                style: const pw.TextStyle(fontSize: 8),
+              ),
               pw.SizedBox(height: 10),
             ],
           ),
@@ -4059,10 +4611,14 @@ Terima kasih.
       );
 
       final bytes = await pdf.save();
-      final nopol = (order['noPolisi'] ?? 'TEMUAN')
-          .toString()
-          .replaceAll(RegExp(r'[^A-Za-z0-9]+'), '_');
-      await Printing.sharePdf(bytes: bytes, filename: 'Estimasi_Temuan_$nopol.pdf');
+      final nopol = (order['noPolisi'] ?? 'TEMUAN').toString().replaceAll(
+        RegExp(r'[^A-Za-z0-9]+'),
+        '_',
+      );
+      await Printing.sharePdf(
+        bytes: bytes,
+        filename: 'Estimasi_Temuan_$nopol.pdf',
+      );
 
       // Tandai order sebagai sudah direlease. Gagal update status tidak membatalkan PDF.
       final orderId = (order['id'] ?? '').toString();
@@ -4082,9 +4638,9 @@ Terima kasih.
       if (mounted) setState(() {});
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal membuat PDF temuan: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal membuat PDF temuan: $e')));
     }
   }
 
@@ -4109,53 +4665,87 @@ Terima kasih.
     ];
     for (var i = 0; i < items.length; i++) {
       final item = items[i];
-      rows.add(pw.TableRow(children: [
-        _pdfCell('${i + 1}', center: true),
-        _pdfCell(item.nama),
-        _pdfCell(formatQty(item.qty), center: true),
-        _pdfCell(_formatIdrPdf(item.harga.toDouble())),
-        _pdfCell(_formatIdrPdf(item.total)),
-      ]));
+      rows.add(
+        pw.TableRow(
+          children: [
+            _pdfCell('${i + 1}', center: true),
+            _pdfCell(item.nama),
+            _pdfCell(formatQty(item.qty), center: true),
+            _pdfCell(_formatIdrPdf(item.harga.toDouble())),
+            _pdfCell(_formatIdrPdf(item.total)),
+          ],
+        ),
+      );
       if (tampilkanDiskonPdf && item.diskonPersen > 0) {
-        rows.add(pw.TableRow(children: [
-          _pdfCell(''),
-          _pdfCell('Diskon item ${formatQty(item.diskonPersen)}%', italic: true),
-          _pdfCell(''),
-          _pdfCell(''),
-          _pdfCell('-${_formatIdrPdf(item.nominalDiskon)}', italic: true),
-        ]));
+        rows.add(
+          pw.TableRow(
+            children: [
+              _pdfCell(''),
+              _pdfCell(
+                'Diskon item ${formatQty(item.diskonPersen)}%',
+                italic: true,
+              ),
+              _pdfCell(''),
+              _pdfCell(''),
+              _pdfCell('-${_formatIdrPdf(item.nominalDiskon)}', italic: true),
+            ],
+          ),
+        );
       }
     }
     if (items.isEmpty) {
-      rows.add(pw.TableRow(children: [
-        _pdfCell('1', center: true), _pdfCell('-'), _pdfCell('-', center: true),
-        _pdfCell('IDR -'), _pdfCell('IDR -'),
-      ]));
+      rows.add(
+        pw.TableRow(
+          children: [
+            _pdfCell('1', center: true),
+            _pdfCell('-'),
+            _pdfCell('-', center: true),
+            _pdfCell('IDR -'),
+            _pdfCell('IDR -'),
+          ],
+        ),
+      );
     }
-    rows.add(pw.TableRow(
-      decoration: const pw.BoxDecoration(color: PdfColors.grey300),
+    rows.add(
+      pw.TableRow(
+        decoration: const pw.BoxDecoration(color: PdfColors.grey300),
+        children: [
+          _pdfCell('', bold: true),
+          _pdfCell('Total $judul', bold: true),
+          _pdfCell('', bold: true),
+          _pdfCell('', bold: true),
+          _pdfCell(_formatIdrPdf(total), bold: true),
+        ],
+      ),
+    );
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.stretch,
       children: [
-        _pdfCell('', bold: true), _pdfCell('Total $judul', bold: true),
-        _pdfCell('', bold: true), _pdfCell('', bold: true),
-        _pdfCell(_formatIdrPdf(total), bold: true),
+        pw.Container(
+          alignment: pw.Alignment.center,
+          padding: const pw.EdgeInsets.symmetric(vertical: 3),
+          decoration: pw.BoxDecoration(
+            color: PdfColors.grey300,
+            border: pw.Border.all(width: 0.6),
+          ),
+          child: pw.Text(
+            judul,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9),
+          ),
+        ),
+        pw.Table(
+          border: pw.TableBorder.all(width: 0.45),
+          columnWidths: const {
+            0: pw.FixedColumnWidth(25),
+            1: pw.FlexColumnWidth(5.2),
+            2: pw.FixedColumnWidth(36),
+            3: pw.FlexColumnWidth(1.8),
+            4: pw.FlexColumnWidth(1.8),
+          },
+          children: rows,
+        ),
       ],
-    ));
-    return pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-      pw.Container(
-        alignment: pw.Alignment.center,
-        padding: const pw.EdgeInsets.symmetric(vertical: 3),
-        decoration: pw.BoxDecoration(color: PdfColors.grey300, border: pw.Border.all(width: 0.6)),
-        child: pw.Text(judul, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9)),
-      ),
-      pw.Table(
-        border: pw.TableBorder.all(width: 0.45),
-        columnWidths: const {
-          0: pw.FixedColumnWidth(25), 1: pw.FlexColumnWidth(5.2),
-          2: pw.FixedColumnWidth(36), 3: pw.FlexColumnWidth(1.8), 4: pw.FlexColumnWidth(1.8),
-        },
-        children: rows,
-      ),
-    ]);
+    );
   }
 
   pw.Widget _pdfKartuFotoTemuan(
@@ -4163,9 +4753,21 @@ Terima kasih.
     Map<String, dynamic> finding,
     Map<String, Uint8List?> fotoBytes,
   ) {
-    final path = (finding['foto_url'] ?? finding['photo_url'] ?? finding['foto'] ?? '').toString();
-    final nama = (finding['nama_part'] ?? finding['namaPart'] ?? finding['part'] ?? 'Temuan $nomor').toString();
-    final kondisi = (finding['kondisi'] ?? finding['keterangan'] ?? finding['deskripsi'] ?? '-').toString();
+    final path =
+        (finding['foto_url'] ?? finding['photo_url'] ?? finding['foto'] ?? '')
+            .toString();
+    final nama =
+        (finding['nama_part'] ??
+                finding['namaPart'] ??
+                finding['part'] ??
+                'Temuan $nomor')
+            .toString();
+    final kondisi =
+        (finding['kondisi'] ??
+                finding['keterangan'] ??
+                finding['deskripsi'] ??
+                '-')
+            .toString();
     final bytes = fotoBytes[path];
 
     return pw.Container(
@@ -4188,24 +4790,41 @@ Terima kasih.
             ),
             child: bytes != null
                 ? pw.Image(pw.MemoryImage(bytes), fit: pw.BoxFit.contain)
-                : pw.Text('Foto tidak tersedia', style: const pw.TextStyle(fontSize: 8)),
+                : pw.Text(
+                    'Foto tidak tersedia',
+                    style: const pw.TextStyle(fontSize: 8),
+                  ),
           ),
           pw.SizedBox(width: 12),
           pw.Expanded(
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('TEMUAN $nomor',
-                    style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+                pw.Text(
+                  'TEMUAN $nomor',
+                  style: pw.TextStyle(
+                    fontSize: 10,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
                 pw.SizedBox(height: 8),
-                pw.Text('Nama Part / Komponen',
-                    style: pw.TextStyle(fontSize: 7, color: PdfColors.grey700)),
+                pw.Text(
+                  'Nama Part / Komponen',
+                  style: pw.TextStyle(fontSize: 7, color: PdfColors.grey700),
+                ),
                 pw.SizedBox(height: 2),
-                pw.Text(nama,
-                    style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+                pw.Text(
+                  nama,
+                  style: pw.TextStyle(
+                    fontSize: 10,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
                 pw.SizedBox(height: 8),
-                pw.Text('Keterangan Kerusakan',
-                    style: pw.TextStyle(fontSize: 7, color: PdfColors.grey700)),
+                pw.Text(
+                  'Keterangan Kerusakan',
+                  style: pw.TextStyle(fontSize: 7, color: PdfColors.grey700),
+                ),
                 pw.SizedBox(height: 2),
                 pw.Text(kondisi, style: const pw.TextStyle(fontSize: 9)),
               ],
@@ -4218,7 +4837,9 @@ Terima kasih.
 
   Future<void> _pilihTemuanUntukPdf(Map<String, dynamic> order) async {
     final semua = ((order['temuan'] as List?) ?? const [])
-        .whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+        .whereType<Map>()
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
     if (semua.isEmpty) return;
     final pilih = <int>{for (var i = 0; i < semua.length; i++) i};
     final ok = await showDialog<bool>(
@@ -4234,20 +4855,32 @@ Terima kasih.
               itemBuilder: (_, i) => CheckboxListTile(
                 value: pilih.contains(i),
                 title: Text('Temuan ${i + 1}'),
-                subtitle: Text((semua[i]['kondisi'] ?? semua[i]['keterangan'] ?? '-').toString()),
-                onChanged: (v) => setD(() => v == true ? pilih.add(i) : pilih.remove(i)),
+                subtitle: Text(
+                  (semua[i]['kondisi'] ?? semua[i]['keterangan'] ?? '-')
+                      .toString(),
+                ),
+                onChanged: (v) =>
+                    setD(() => v == true ? pilih.add(i) : pilih.remove(i)),
               ),
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(dc, false), child: const Text('Batal')),
-            FilledButton(onPressed: pilih.isEmpty ? null : () => Navigator.pop(dc, true), child: const Text('Buat PDF')),
+            TextButton(
+              onPressed: () => Navigator.pop(dc, false),
+              child: const Text('Batal'),
+            ),
+            FilledButton(
+              onPressed: pilih.isEmpty ? null : () => Navigator.pop(dc, true),
+              child: const Text('Buat PDF'),
+            ),
           ],
         ),
       ),
     );
     if (ok == true) {
-      await _buatPdfTemuan(order, [for (final i in pilih.toList()..sort()) semua[i]]);
+      await _buatPdfTemuan(order, [
+        for (final i in pilih.toList()..sort()) semua[i],
+      ]);
     }
   }
 
@@ -4358,7 +4991,9 @@ Terima kasih.
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Belum ada history PDF yang sudah direlease untuk dibersihkan.'),
+          content: Text(
+            'Belum ada history PDF yang sudah direlease untuk dibersihkan.',
+          ),
         ),
       );
       return;
@@ -4394,7 +5029,9 @@ Terima kasih.
                   onChanged: (v) => setD(() {
                     dipilih.clear();
                     if (v == true) {
-                      dipilih.addAll(history.map((e) => (e['id'] ?? '').toString()));
+                      dipilih.addAll(
+                        history.map((e) => (e['id'] ?? '').toString()),
+                      );
                     }
                   }),
                 ),
@@ -4507,9 +5144,15 @@ Terima kasih.
                 children: [
                   Icon(Icons.fact_check_outlined, size: 54, color: Colors.grey),
                   SizedBox(height: 12),
-                  Text('Belum ada estimasi di Temuan Service', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    'Belum ada estimasi di Temuan Service',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 5),
-                  Text('Lengkapi data customer lalu tekan Kirim Estimasi.', textAlign: TextAlign.center),
+                  Text(
+                    'Lengkapi data customer lalu tekan Kirim Estimasi.',
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),
@@ -4540,7 +5183,13 @@ Terima kasih.
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text((data['namaCustomer'] ?? '').toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(
+                      (data['namaCustomer'] ?? '').toString(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 5),
                     Text('Nomor Polisi : ${data['noPolisi'] ?? '-'}'),
                     Text('No. Telepon/WA : ${data['noTelepon'] ?? '-'}'),
@@ -4548,7 +5197,15 @@ Terima kasih.
                     Text('Nomor Rangka : ${data['noRangka'] ?? '-'}'),
                     Text('Nama SA : ${data['namaSa'] ?? '-'}'),
                     const SizedBox(height: 8),
-                    Text(jumlah == 0 ? 'Menunggu Temuan Teknisi' : '$jumlah Temuan', style: TextStyle(color: jumlah == 0 ? Colors.orange.shade800 : biruUtama, fontWeight: FontWeight.w600)),
+                    Text(
+                      jumlah == 0
+                          ? 'Menunggu Temuan Teknisi'
+                          : '$jumlah Temuan',
+                      style: TextStyle(
+                        color: jumlah == 0 ? Colors.orange.shade800 : biruUtama,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -4572,31 +5229,31 @@ Terima kasih.
       builder: (dc) => StatefulBuilder(
         builder: (context, setD) {
           Widget tombolPesanWa() => FilledButton.icon(
-                onPressed: dipilih.isEmpty
-                    ? null
-                    : () async {
-                        final selected = [
-                          for (final i in dipilih.toList()..sort()) temuan[i],
-                        ];
-                        await _kirimPesanWaTemuan(data, selected);
-                      },
-                icon: const Icon(Icons.chat_outlined),
-                label: Text('Kirim Pesan WA (${dipilih.length})'),
-              );
+            onPressed: dipilih.isEmpty
+                ? null
+                : () async {
+                    final selected = [
+                      for (final i in dipilih.toList()..sort()) temuan[i],
+                    ];
+                    await _kirimPesanWaTemuan(data, selected);
+                  },
+            icon: const Icon(Icons.chat_outlined),
+            label: Text('Kirim Pesan WA (${dipilih.length})'),
+          );
 
           Widget tombolPdfWa() => FilledButton.tonalIcon(
-                onPressed: dipilih.isEmpty
-                    ? null
-                    : () async {
-                        final selected = [
-                          for (final i in dipilih.toList()..sort()) temuan[i],
-                        ];
-                        Navigator.pop(dc);
-                        await _buatPdfTemuan(data, selected);
-                      },
-                icon: const Icon(Icons.picture_as_pdf_outlined),
-                label: Text('Kirim PDF WA (${dipilih.length})'),
-              );
+            onPressed: dipilih.isEmpty
+                ? null
+                : () async {
+                    final selected = [
+                      for (final i in dipilih.toList()..sort()) temuan[i],
+                    ];
+                    Navigator.pop(dc);
+                    await _buatPdfTemuan(data, selected);
+                  },
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            label: Text('Kirim PDF WA (${dipilih.length})'),
+          );
 
           return AlertDialog(
             insetPadding: const EdgeInsets.all(12),
@@ -4653,12 +5310,20 @@ Terima kasih.
                       itemCount: temuan.length,
                       itemBuilder: (context, i) {
                         final f = temuan[i];
-                        final foto = (f['foto_url'] ?? f['photo_url'] ?? f['foto'] ?? '').toString();
-                        final ket = (f['kondisi'] ?? f['keterangan'] ?? f['deskripsi'] ?? '-').toString();
+                        final foto =
+                            (f['foto_url'] ?? f['photo_url'] ?? f['foto'] ?? '')
+                                .toString();
+                        final ket =
+                            (f['kondisi'] ??
+                                    f['keterangan'] ??
+                                    f['deskripsi'] ??
+                                    '-')
+                                .toString();
                         final jasa = _temuanList(f, 'estimasi_jasa');
                         final part = _temuanList(f, 'estimasi_sparepart');
                         final bahan = _temuanList(f, 'estimasi_bahan');
-                        final total = _totalKategoriTemuan(jasa) +
+                        final total =
+                            _totalKategoriTemuan(jasa) +
                             _totalKategoriTemuan(part) +
                             _totalKategoriTemuan(bahan);
                         final checked = dipilih.contains(i);
@@ -4685,15 +5350,26 @@ Terima kasih.
                                     Expanded(
                                       child: Text(
                                         'Temuan ${i + 1}',
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     ),
-                                    Text(checked ? 'Dipilih untuk PDF' : 'Belum dipilih',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: checked ? biruUtama : Colors.grey.shade600,
-                                          fontWeight: checked ? FontWeight.w600 : FontWeight.normal,
-                                        )),
+                                    Text(
+                                      checked
+                                          ? 'Dipilih untuk PDF'
+                                          : 'Belum dipilih',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: checked
+                                            ? biruUtama
+                                            : Colors.grey.shade600,
+                                        fontWeight: checked
+                                            ? FontWeight.w600
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 if (foto.isNotEmpty) ...[
@@ -4703,9 +5379,16 @@ Terima kasih.
                                 const SizedBox(height: 8),
                                 Text(ket),
                                 const SizedBox(height: 8),
-                                Text('Jasa: ${jasa.length} • Spare Part: ${part.length} • Bahan: ${bahan.length}'),
+                                Text(
+                                  'Jasa: ${jasa.length} • Spare Part: ${part.length} • Bahan: ${bahan.length}',
+                                ),
                                 const SizedBox(height: 4),
-                                Text('Total: ${rupiah(total)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                  'Total: ${rupiah(total)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const SizedBox(height: 10),
                                 Align(
                                   alignment: Alignment.centerLeft,
@@ -4737,9 +5420,16 @@ Terima kasih.
                         ..addAll(List.generate(temuan.length, (i) => i));
                     }
                   }),
-                  child: Text(dipilih.length == temuan.length ? 'Batal Pilih Semua' : 'Pilih Semua'),
+                  child: Text(
+                    dipilih.length == temuan.length
+                        ? 'Batal Pilih Semua'
+                        : 'Pilih Semua',
+                  ),
                 ),
-              TextButton(onPressed: () => Navigator.pop(dc), child: const Text('Tutup')),
+              TextButton(
+                onPressed: () => Navigator.pop(dc),
+                child: const Text('Tutup'),
+              ),
             ],
           );
         },
@@ -4776,21 +5466,25 @@ Terima kasih.
                 child: IndexedStack(
                   index: _tabAktif,
                   children: [
-                  _halamanScroll([customerSection(), const SizedBox(height: 14), statusDatabase()]),
-                  _halamanScroll([_kategoriJasa()]),
-                  _halamanScroll([_kategoriSparePart()]),
-                  _halamanScroll([_kategoriBahan()]),
-                  _halamanScroll([
-                    _rincianTotalBaru(),
-                    const SizedBox(height: 16),
-                    informasiSection(),
-                    const SizedBox(height: 16),
-                    pengaturanPdfSection(),
-                    const SizedBox(height: 16),
-                    pengaturanTemplateWaSection(),
-                    const SizedBox(height: 16),
-                    pengaturanSpreadsheetSection(),
-                  ]),
+                    _halamanScroll([
+                      customerSection(),
+                      const SizedBox(height: 14),
+                      statusDatabase(),
+                    ]),
+                    _halamanScroll([_kategoriJasa()]),
+                    _halamanScroll([_kategoriSparePart()]),
+                    _halamanScroll([_kategoriBahan()]),
+                    _halamanScroll([
+                      _rincianTotalBaru(),
+                      const SizedBox(height: 16),
+                      informasiSection(),
+                      const SizedBox(height: 16),
+                      pengaturanPdfSection(),
+                      const SizedBox(height: 16),
+                      pengaturanTemplateWaSection(),
+                      const SizedBox(height: 16),
+                      pengaturanSpreadsheetSection(),
+                    ]),
                     _halamanScroll([_temuanServicePage()]),
                   ],
                 ),
@@ -4803,9 +5497,9 @@ Terima kasih.
   }
 
   Widget _halamanScroll(List<Widget> children) => ListView(
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 36),
-        children: children,
-      );
+    padding: const EdgeInsets.fromLTRB(14, 14, 14, 36),
+    children: children,
+  );
 
   Widget _headerBaru() {
     const navy = Color(0xFF073676);
@@ -4906,12 +5600,31 @@ Terima kasih.
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _headerIcon(Icons.star_outline, 'Simpan Favorit', simpanEstimasiFavorit),
-              _headerIcon(Icons.folder_open_outlined, 'Buka Favorit', bukaEstimasiFavorit),
-              _headerIcon(Icons.picture_as_pdf_outlined, 'Buat PDF', buatPdfEstimasi),
-              Container(width: 1, height: 30, margin: const EdgeInsets.symmetric(horizontal: 4), color: const Color(0xFFB9C7D8)),
               _headerIcon(
-                tampilkanDiskon ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                Icons.star_outline,
+                'Simpan Favorit',
+                simpanEstimasiFavorit,
+              ),
+              _headerIcon(
+                Icons.folder_open_outlined,
+                'Buka Favorit',
+                bukaEstimasiFavorit,
+              ),
+              _headerIcon(
+                Icons.picture_as_pdf_outlined,
+                'Buat PDF',
+                buatPdfEstimasi,
+              ),
+              Container(
+                width: 1,
+                height: 30,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                color: const Color(0xFFB9C7D8),
+              ),
+              _headerIcon(
+                tampilkanDiskon
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 tampilkanDiskon ? 'Sembunyikan diskon' : 'Tampilkan diskon',
                 () => setState(() => tampilkanDiskon = !tampilkanDiskon),
               ),
@@ -4940,7 +5653,10 @@ Terima kasih.
                         children: [
                           branding,
                           const SizedBox(height: 5),
-                          Align(alignment: Alignment.centerRight, child: actions),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: actions,
+                          ),
                         ],
                       )
                     : Row(
@@ -4976,8 +5692,14 @@ Terima kasih.
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           _InfoHeader(Icons.phone_outlined, '0896 5650 0965'),
-                          _InfoHeader(Icons.location_on_outlined, 'Daihatsu Purwakarta'),
-                          _InfoHeader(Icons.handshake_outlined, 'Service Berkualitas, Sahabat Terpercaya'),
+                          _InfoHeader(
+                            Icons.location_on_outlined,
+                            'Daihatsu Purwakarta',
+                          ),
+                          _InfoHeader(
+                            Icons.handshake_outlined,
+                            'Service Berkualitas, Sahabat Terpercaya',
+                          ),
                         ],
                       ),
               ),
@@ -4988,7 +5710,8 @@ Terima kasih.
     );
   }
 
-  Widget _headerIcon(IconData icon, String tooltip, VoidCallback onTap) => IconButton(
+  Widget _headerIcon(IconData icon, String tooltip, VoidCallback onTap) =>
+      IconButton(
         tooltip: tooltip,
         onPressed: onTap,
         visualDensity: VisualDensity.compact,
@@ -5021,15 +5744,21 @@ Terima kasih.
                   onTap: () => setState(() => _tabAktif = i),
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(
-                        color: aktif ? biruUtama : Colors.transparent,
-                        width: 3,
-                      )),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: aktif ? biruUtama : Colors.transparent,
+                          width: 3,
+                        ),
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(tabs[i].$1, color: aktif ? biruUtama : Colors.black54, size: 22),
+                        Icon(
+                          tabs[i].$1,
+                          color: aktif ? biruUtama : Colors.black54,
+                          size: 22,
+                        ),
                         const SizedBox(height: 3),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -5041,7 +5770,9 @@ Terima kasih.
                             style: TextStyle(
                               fontSize: 12,
                               color: aktif ? biruUtama : Colors.black87,
-                              fontWeight: aktif ? FontWeight.bold : FontWeight.w500,
+                              fontWeight: aktif
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
                             ),
                           ),
                         ),
@@ -5058,40 +5789,91 @@ Terima kasih.
   }
 
   Widget _kategoriJasa() => kategoriSection(
-    title: 'JASA', icon: Icons.build, buttonText: '+ Jasa', items: daftarJasa,
-    totalLabel: 'Total Jasa', subtotal: subtotalJasa, diskon: diskonJasa, total: totalJasa,
+    title: 'JASA',
+    icon: Icons.build,
+    buttonText: '+ Jasa',
+    items: daftarJasa,
+    totalLabel: 'Total Jasa',
+    subtotal: subtotalJasa,
+    diskon: diskonJasa,
+    total: totalJasa,
     diskonAkhirPersen: diskonAkhirJasaPersen,
-    onEditDiskonAkhir: () => editDiskonAkhir(judul: 'Diskon All Jasa', nilaiAwal: diskonAkhirJasaPersen, onSimpan: (v) => diskonAkhirJasaPersen = v),
+    onEditDiskonAkhir: () => editDiskonAkhir(
+      judul: 'Diskon All Jasa',
+      nilaiAwal: diskonAkhirJasaPersen,
+      onSimpan: (v) => diskonAkhirJasaPersen = v,
+    ),
     onTambah: bukaPencarianJasa,
   );
 
   Widget _kategoriSparePart() => kategoriSection(
-    title: 'SPARE PART', icon: Icons.settings, buttonText: '+ Spare Part', items: daftarSparePart,
-    totalLabel: 'Total Spare Part', subtotal: subtotalSparePart, diskon: diskonSparePart, total: totalSparePart,
+    title: 'SPARE PART',
+    icon: Icons.settings,
+    buttonText: '+ Spare Part',
+    items: daftarSparePart,
+    totalLabel: 'Total Spare Part',
+    subtotal: subtotalSparePart,
+    diskon: diskonSparePart,
+    total: totalSparePart,
     diskonAkhirPersen: diskonAkhirSparePartPersen,
-    onEditDiskonAkhir: () => editDiskonAkhir(judul: 'Diskon All Spare Part', nilaiAwal: diskonAkhirSparePartPersen, onSimpan: (v) => diskonAkhirSparePartPersen = v),
-    onTambah: loadingExcel ? null : () => bukaPencarianMasterLokal('Cari Spare Part', KategoriEstimasi.sparePart),
+    onEditDiskonAkhir: () => editDiskonAkhir(
+      judul: 'Diskon All Spare Part',
+      nilaiAwal: diskonAkhirSparePartPersen,
+      onSimpan: (v) => diskonAkhirSparePartPersen = v,
+    ),
+    onTambah: loadingExcel
+        ? null
+        : () => bukaPencarianMasterLokal(
+            'Cari Spare Part',
+            KategoriEstimasi.sparePart,
+          ),
   );
 
   Widget _kategoriBahan() => kategoriSection(
-    title: 'BAHAN', icon: Icons.inventory_2, buttonText: '+ Bahan', items: daftarBahan,
-    totalLabel: 'Total Bahan', subtotal: subtotalBahan, diskon: diskonBahan, total: totalBahan,
+    title: 'BAHAN',
+    icon: Icons.inventory_2,
+    buttonText: '+ Bahan',
+    items: daftarBahan,
+    totalLabel: 'Total Bahan',
+    subtotal: subtotalBahan,
+    diskon: diskonBahan,
+    total: totalBahan,
     diskonAkhirPersen: diskonAkhirBahanPersen,
-    onEditDiskonAkhir: () => editDiskonAkhir(judul: 'Diskon All Bahan', nilaiAwal: diskonAkhirBahanPersen, onSimpan: (v) => diskonAkhirBahanPersen = v),
-    onTambah: loadingExcel ? null : () => bukaPencarianMasterLokal('Cari Bahan', KategoriEstimasi.bahan),
+    onEditDiskonAkhir: () => editDiskonAkhir(
+      judul: 'Diskon All Bahan',
+      nilaiAwal: diskonAkhirBahanPersen,
+      onSimpan: (v) => diskonAkhirBahanPersen = v,
+    ),
+    onTambah: loadingExcel
+        ? null
+        : () => bukaPencarianMasterLokal('Cari Bahan', KategoriEstimasi.bahan),
   );
 
   Widget _rincianTotalBaru() {
-    return LayoutBuilder(builder: (context, c) {
-      final kiri = Column(children: [
-        _tabelRincian('JASA', daftarJasa), const SizedBox(height: 12),
-        _tabelRincian('SPARE PARTS', daftarSparePart), const SizedBox(height: 12),
-        _tabelRincian('BAHAN / OLI', daftarBahan),
-      ]);
-      final kanan = _panelTotalBaru();
-      if (c.maxWidth < 850) return Column(children: [kiri, const SizedBox(height: 14), kanan]);
-      return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(flex: 2, child: kiri), const SizedBox(width: 14), Expanded(child: kanan)]);
-    });
+    return LayoutBuilder(
+      builder: (context, c) {
+        final kiri = Column(
+          children: [
+            _tabelRincian('JASA', daftarJasa),
+            const SizedBox(height: 12),
+            _tabelRincian('SPARE PARTS', daftarSparePart),
+            const SizedBox(height: 12),
+            _tabelRincian('BAHAN / OLI', daftarBahan),
+          ],
+        );
+        final kanan = _panelTotalBaru();
+        if (c.maxWidth < 850)
+          return Column(children: [kiri, const SizedBox(height: 14), kanan]);
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(flex: 2, child: kiri),
+            const SizedBox(width: 14),
+            Expanded(child: kanan),
+          ],
+        );
+      },
+    );
   }
 
   Widget _tabelRincian(String judul, List<ItemEstimasi> items) {
@@ -5099,54 +5881,203 @@ Terima kasih.
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: const Color(0xFFD6E0EC)), borderRadius: BorderRadius.circular(12)),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(judul, style: const TextStyle(color: Color(0xFF073676), fontWeight: FontWeight.w900, fontSize: 16)),
-        const SizedBox(height: 8),
-        if (items.isEmpty) const Padding(padding: EdgeInsets.all(12), child: Text('Belum ada item', style: TextStyle(color: Colors.grey)))
-        else ...items.asMap().entries.map((e) => Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFE7EDF4)))),
-          child: Row(children: [
-            SizedBox(width: 28, child: Text('${e.key + 1}.')),
-            Expanded(flex: 4, child: Text(e.value.nama, style: const TextStyle(fontWeight: FontWeight.w600))),
-            SizedBox(width: 52, child: Text(formatQty(e.value.qty), textAlign: TextAlign.center)),
-            Expanded(flex: 2, child: Text(rupiah(e.value.harga.toDouble()), textAlign: TextAlign.right)),
-            if (tampilkanDiskon) SizedBox(width: 55, child: Text('${formatQty(e.value.diskonPersen)}%', textAlign: TextAlign.center)),
-            Expanded(flex: 2, child: Text(rupiah(e.value.total), textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.bold))),
-          ]),
-        )),
-        const SizedBox(height: 8),
-        Row(children: [Expanded(child: Text('TOTAL $judul', style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF073676)))), Text(rupiah(total), style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF073676)))]),
-      ]),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFD6E0EC)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            judul,
+            style: const TextStyle(
+              color: Color(0xFF073676),
+              fontWeight: FontWeight.w900,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 8),
+          if (items.isEmpty)
+            const Padding(
+              padding: EdgeInsets.all(12),
+              child: Text(
+                'Belum ada item',
+                style: TextStyle(color: Colors.grey),
+              ),
+            )
+          else
+            ...items.asMap().entries.map(
+              (e) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Color(0xFFE7EDF4))),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 28, child: Text('${e.key + 1}.')),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        e.value.nama,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 52,
+                      child: Text(
+                        formatQty(e.value.qty),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        rupiah(e.value.harga.toDouble()),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                    if (tampilkanDiskon)
+                      SizedBox(
+                        width: 55,
+                        child: Text(
+                          '${formatQty(e.value.diskonPersen)}%',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        rupiah(e.value.total),
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'TOTAL $judul',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF073676),
+                  ),
+                ),
+              ),
+              Text(
+                rupiah(total),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF073676),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget _panelTotalBaru() {
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: const Color(0xFFD6E0EC)), borderRadius: BorderRadius.circular(12)),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7), decoration: BoxDecoration(color: const Color(0xFF073676), borderRadius: BorderRadius.circular(7)), child: const Text('TOTAL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-        const SizedBox(height: 18),
-        _ringkasRow('Total Jasa', totalJasa),
-        _ringkasRow('Total Spare Parts', totalSparePart),
-        _ringkasRow('Total Bahan', totalBahan),
-        const Divider(height: 28),
-        _ringkasRow('Subtotal', totalSebelumDiskonGrand),
-        if (tampilkanDiskon) ...[
-          Padding(padding: const EdgeInsets.symmetric(vertical: 6), child: Row(children: [const Expanded(child: Text('Diskon Total (%)')), InkWell(onTap: () => editDiskonAkhir(judul: 'Diskon Grand Total', nilaiAwal: diskonGrandPersen, onSimpan: (v) => diskonGrandPersen = v), child: Text('${formatQty(diskonGrandPersen)} %', style: const TextStyle(fontWeight: FontWeight.bold, color: biruUtama)))])),
-          _ringkasRow('Diskon Total (Rp)', diskonGrand),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFD6E0EC)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+            decoration: BoxDecoration(
+              color: const Color(0xFF073676),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: const Text(
+              'TOTAL',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          _ringkasRow('Total Jasa', totalJasa),
+          _ringkasRow('Total Spare Parts', totalSparePart),
+          _ringkasRow('Total Bahan', totalBahan),
+          const Divider(height: 28),
+          _ringkasRow('Subtotal', totalSebelumDiskonGrand),
+          if (tampilkanDiskon) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  const Expanded(child: Text('Diskon Total (%)')),
+                  InkWell(
+                    onTap: () => editDiskonAkhir(
+                      judul: 'Diskon Grand Total',
+                      nilaiAwal: diskonGrandPersen,
+                      onSimpan: (v) => diskonGrandPersen = v,
+                    ),
+                    child: Text(
+                      '${formatQty(diskonGrandPersen)} %',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: biruUtama,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _ringkasRow('Diskon Total (Rp)', diskonGrand),
+          ],
+          const Divider(height: 28),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'GRAND TOTAL',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF073676),
+                  ),
+                ),
+              ),
+              Text(
+                rupiah(grandTotal),
+                style: const TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF073676),
+                ),
+              ),
+            ],
+          ),
         ],
-        const Divider(height: 28),
-        Row(children: [const Expanded(child: Text('GRAND TOTAL', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Color(0xFF073676)))), Text(rupiah(grandTotal), style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: Color(0xFF073676)))]),
-      ]),
+      ),
     );
   }
 
   Widget _ringkasRow(String label, double nilai) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 6),
-    child: Row(children: [Expanded(child: Text(label)), Text(rupiah(nilai), style: const TextStyle(fontWeight: FontWeight.w600))]),
+    child: Row(
+      children: [
+        Expanded(child: Text(label)),
+        Text(
+          rupiah(nilai),
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+      ],
+    ),
   );
 
   Widget statusDatabase() {
@@ -5228,11 +6159,7 @@ Terima kasih.
           child: isPhone
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    status,
-                    const SizedBox(height: 14),
-                    tombol,
-                  ],
+                  children: [status, const SizedBox(height: 14), tombol],
                 )
               : Row(
                   children: [
@@ -5262,8 +6189,9 @@ Terima kasih.
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton.icon(
-                    onPressed:
-                        sedangAmbilCustomer ? null : ambilCustomerSpreadsheet,
+                    onPressed: sedangAmbilCustomer
+                        ? null
+                        : ambilCustomerSpreadsheet,
                     icon: sedangAmbilCustomer
                         ? const SizedBox(
                             width: 18,
@@ -5300,19 +6228,11 @@ Terima kasih.
                   Icons.phone_outlined,
                 ),
                 const SizedBox(height: 12),
-                customerField(
-                  kilometerController,
-                  'Kilometer',
-                  Icons.speed,
-                ),
+                customerField(kilometerController, 'Kilometer', Icons.speed),
                 const SizedBox(height: 12),
                 tipeKendaraanField(),
                 const SizedBox(height: 12),
-                customerField(
-                  noRangkaController,
-                  'No. Rangka',
-                  Icons.numbers,
-                ),
+                customerField(noRangkaController, 'No. Rangka', Icons.numbers),
               ],
             );
           }
@@ -5322,8 +6242,9 @@ Terima kasih.
               Align(
                 alignment: Alignment.centerRight,
                 child: FilledButton.icon(
-                  onPressed:
-                      sedangAmbilCustomer ? null : ambilCustomerSpreadsheet,
+                  onPressed: sedangAmbilCustomer
+                      ? null
+                      : ambilCustomerSpreadsheet,
                   icon: sedangAmbilCustomer
                       ? const SizedBox(
                           width: 18,
@@ -5372,9 +6293,7 @@ Terima kasih.
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(
-                    child: tipeKendaraanField(),
-                  ),
+                  Expanded(child: tipeKendaraanField()),
                   const SizedBox(width: 12),
                   Expanded(
                     child: customerField(
@@ -5400,7 +6319,6 @@ Terima kasih.
     );
   }
 
-
   Widget tipeKendaraanField() {
     final current = tipeKendaraanController.text.trim();
     final tipe = [...daftarTipeKendaraan];
@@ -5409,16 +6327,27 @@ Terima kasih.
     }
     return DropdownButtonFormField<String>(
       value: current.isNotEmpty ? current : null,
-      decoration: const InputDecoration(labelText:'Tipe Kendaraan',prefixIcon:Icon(Icons.car_repair)),
+      decoration: const InputDecoration(
+        labelText: 'Tipe Kendaraan',
+        prefixIcon: Icon(Icons.car_repair),
+      ),
       hint: const Text('Pilih tipe kendaraan'),
-      items: tipe.map((e)=>DropdownMenuItem(value:e,child:Text(e))).toList(),
-      onChanged:(v){
-        if(v==null)return;
-        final lama=tipeKendaraanController.text.trim();
-        if(lama.isNotEmpty && lama!=v && daftarJasa.isNotEmpty){
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Tipe kendaraan berubah. Periksa kembali Jasa yang sudah dipilih.')));
+      items: tipe
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+          .toList(),
+      onChanged: (v) {
+        if (v == null) return;
+        final lama = tipeKendaraanController.text.trim();
+        if (lama.isNotEmpty && lama != v && daftarJasa.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Tipe kendaraan berubah. Periksa kembali Jasa yang sudah dipilih.',
+              ),
+            ),
+          );
         }
-        setState(()=>tipeKendaraanController.text=v);
+        setState(() => tipeKendaraanController.text = v);
       },
     );
   }
@@ -5430,10 +6359,7 @@ Terima kasih.
   ) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-      ),
+      decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)),
     );
   }
 
@@ -5476,9 +6402,8 @@ Terima kasih.
                 tooltip: tampilkanDiskon
                     ? 'Sembunyikan diskon'
                     : 'Tampilkan diskon',
-                onPressed: () => setState(
-                  () => tampilkanDiskon = !tampilkanDiskon,
-                ),
+                onPressed: () =>
+                    setState(() => tampilkanDiskon = !tampilkanDiskon),
                 icon: Icon(
                   tampilkanDiskon
                       ? Icons.visibility_off_outlined
@@ -5524,10 +6449,10 @@ Terima kasih.
             onTambah: loadingExcel
                 ? null
                 : () => bukaPencarian(
-                      'Cari Spare Part',
-                      spareParts,
-                      KategoriEstimasi.sparePart,
-                    ),
+                    'Cari Spare Part',
+                    spareParts,
+                    KategoriEstimasi.sparePart,
+                  ),
           ),
           const SizedBox(height: 20),
           kategoriSection(
@@ -5548,10 +6473,10 @@ Terima kasih.
             onTambah: loadingExcel
                 ? null
                 : () => bukaPencarian(
-                      'Cari Bahan',
-                      bahan,
-                      KategoriEstimasi.bahan,
-                    ),
+                    'Cari Bahan',
+                    bahan,
+                    KategoriEstimasi.bahan,
+                  ),
           ),
         ],
       ),
@@ -5618,54 +6543,35 @@ Terima kasih.
           else
             ...items.map(estimasiItem),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: const BoxDecoration(
               color: Color(0xFFF8FAFD),
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(13)),
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(13)),
             ),
             child: tampilkanDiskon
                 ? Column(
                     children: [
                       kategoriTotalRow('Subtotal', subtotal),
                       const SizedBox(height: 5),
-                      kategoriTotalRow(
-                        'Diskon',
-                        diskon,
-                        negatif: true,
-                      ),
+                      kategoriTotalRow('Diskon', diskon, negatif: true),
                       const SizedBox(height: 5),
                       Row(
                         children: [
-                          const Expanded(
-                            child: Text('Diskon All (%)'),
-                          ),
+                          const Expanded(child: Text('Diskon All (%)')),
                           Text(
                             '${formatQty(diskonAkhirPersen)}%',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(width: 6),
                           IconButton(
                             tooltip: 'Edit diskon all',
                             onPressed: onEditDiskonAkhir,
-                            icon: const Icon(
-                              Icons.edit_outlined,
-                              size: 18,
-                            ),
+                            icon: const Icon(Icons.edit_outlined, size: 18),
                           ),
                         ],
                       ),
                       const Divider(height: 18),
-                      kategoriTotalRow(
-                        totalLabel,
-                        total,
-                        utama: true,
-                      ),
+                      kategoriTotalRow(totalLabel, total, utama: true),
                     ],
                   )
                 : kategoriTotalRow(totalLabel, total, utama: true),
@@ -5687,8 +6593,7 @@ Terima kasih.
           child: Text(
             label,
             style: TextStyle(
-              fontWeight:
-                  utama ? FontWeight.bold : FontWeight.normal,
+              fontWeight: utama ? FontWeight.bold : FontWeight.normal,
             ),
           ),
         ),
@@ -5696,8 +6601,7 @@ Terima kasih.
           negatif && value > 0 ? '-${rupiah(value)}' : rupiah(value),
           style: TextStyle(
             color: utama ? biruUtama : Colors.black87,
-            fontWeight:
-                utama ? FontWeight.bold : FontWeight.w600,
+            fontWeight: utama ? FontWeight.bold : FontWeight.w600,
             fontSize: utama ? 16 : 14,
           ),
         ),
@@ -5713,9 +6617,7 @@ Terima kasih.
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE5EBF2)),
-        ),
+        border: Border(bottom: BorderSide(color: Color(0xFFE5EBF2))),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -5742,10 +6644,7 @@ Terima kasih.
                   'Subtotal ${rupiah(item.subtotal)} • '
                   'Diskon ${formatQty(item.diskonPersen)}% '
                   '(-${rupiah(item.nominalDiskon)})',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
             ],
@@ -5778,9 +6677,7 @@ Terima kasih.
                   decoration: BoxDecoration(
                     color: biruMuda,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: const Color(0xFFBBD7F2),
-                    ),
+                    border: Border.all(color: const Color(0xFFBBD7F2)),
                   ),
                   child: Text(
                     formatQty(item.qty),
@@ -5805,31 +6702,20 @@ Terima kasih.
             onTap: () => editDiskon(item),
             child: Container(
               constraints: const BoxConstraints(minWidth: 76),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 8,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF7E6),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: const Color(0xFFFFD58A),
-                ),
+                border: Border.all(color: const Color(0xFFFFD58A)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.percent,
-                    size: 15,
-                    color: Colors.orange,
-                  ),
+                  const Icon(Icons.percent, size: 15, color: Colors.orange),
                   const SizedBox(width: 4),
                   Text(
                     formatQty(item.diskonPersen),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -5839,10 +6725,7 @@ Terima kasih.
           final hargaTotal = Text(
             rupiah(item.total),
             textAlign: TextAlign.right,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           );
 
           final hapus = IconButton(
@@ -5852,10 +6735,7 @@ Terima kasih.
                 itemEstimasi.removeWhere((e) => e.id == item.id);
               });
             },
-            icon: const Icon(
-              Icons.delete_outline,
-              color: Colors.red,
-            ),
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
           );
 
           if (mobile) {
@@ -5923,10 +6803,7 @@ Terima kasih.
               maxLines: 1,
               overflow: TextOverflow.visible,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             );
 
             final hapusMobile = SizedBox(
@@ -5941,7 +6818,11 @@ Terima kasih.
                     itemEstimasi.removeWhere((e) => e.id == item.id);
                   });
                 },
-                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 19),
+                icon: const Icon(
+                  Icons.delete_outline,
+                  color: Colors.red,
+                  size: 19,
+                ),
               ),
             );
 
@@ -5997,17 +6878,27 @@ Terima kasih.
           final keterangan = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Keterangan :', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Keterangan :',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
-              const Text('1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu'),
+              const Text(
+                '1. Apabila terdapat penambahan diluar estimasi maka akan diberitahukan terlebih dahulu',
+              ),
               const Text('2. Estimasi biaya ini bukan bukti pembayaran'),
               const Text('3. Harga sudah termasuk PPN'),
-              Text('4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text} - ${namaBankController.text}'),
+              Text(
+                '4. Pembayaran dapat ditransfer ke Rek. ${namaRekeningController.text} - ${namaBankController.text}',
+              ),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent, style: flutter.BorderStyle.solid),
+                  border: Border.all(
+                    color: Colors.blueAccent,
+                    style: flutter.BorderStyle.solid,
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -6017,7 +6908,14 @@ Terima kasih.
                     infoLine('Nama Rekening', namaRekeningController.text),
                     infoLine('Bank', namaBankController.text),
                     const SizedBox(height: 4),
-                    const Text('*Data rekening dapat berubah sewaktu-waktu', style: TextStyle(color: biruUtama, fontStyle: FontStyle.italic, fontWeight: FontWeight.w600)),
+                    const Text(
+                      '*Data rekening dapat berubah sewaktu-waktu',
+                      style: TextStyle(
+                        color: biruUtama,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -6030,20 +6928,41 @@ Terima kasih.
               Container(
                 width: 270,
                 padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(border: Border.all(color: Colors.black54)),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54),
+                ),
                 child: Column(
                   children: [
-                    const Text('SERVICE ADVISOR', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    const Text(
+                      'SERVICE ADVISOR',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                     const SizedBox(height: 24),
-                    Text(namaServiceAdvisorController.text, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      namaServiceAdvisorController.text,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     Text('Telp/WA : ${noWaServiceAdvisorController.text}'),
                   ],
                 ),
               ),
             ],
           );
-          if (mobile) return Column(children: [keterangan, const SizedBox(height: 20), advisor]);
-          return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(flex: 3, child: keterangan), const SizedBox(width: 30), Expanded(flex: 2, child: advisor)]);
+          if (mobile)
+            return Column(
+              children: [keterangan, const SizedBox(height: 20), advisor],
+            );
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: keterangan),
+              const SizedBox(width: 30),
+              Expanded(flex: 2, child: advisor),
+            ],
+          );
         },
       ),
     );
@@ -6051,32 +6970,97 @@ Terima kasih.
 
   Widget infoLine(String label, String value) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(children: [SizedBox(width: 140, child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold))), const Text(':  '), Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w600)))]),
+    child: Row(
+      children: [
+        SizedBox(
+          width: 140,
+          child: Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        const Text(':  '),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    ),
   );
 
   Widget pengaturanPdfSection() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: biruUtama), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: biruUtama),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(children: [Icon(Icons.settings, color: biruUtama), SizedBox(width: 8), Text('PENGATURAN PDF (dapat diubah)', style: TextStyle(color: biruUtama, fontWeight: FontWeight.bold))]),
+          const Row(
+            children: [
+              Icon(Icons.settings, color: biruUtama),
+              SizedBox(width: 8),
+              Text(
+                'PENGATURAN PDF (dapat diubah)',
+                style: TextStyle(color: biruUtama, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
           const SizedBox(height: 14),
-          LayoutBuilder(builder: (context, constraints) {
-            final mobile = constraints.maxWidth < 760;
-            final kiri = Column(children: [pdfSettingField('Nama Service Advisor', namaServiceAdvisorController), const SizedBox(height: 8), pdfSettingField('No. Telp/WA', noWaServiceAdvisorController)]);
-            final kanan = Column(children: [pdfSettingField('Nama Rekening', namaRekeningController), const SizedBox(height: 8), pdfSettingField('Nama Bank', namaBankController), const SizedBox(height: 8), pdfSettingField('Nomor Rekening', nomorRekeningController)]);
-            if (mobile) return Column(children: [kiri, const SizedBox(height: 8), kanan]);
-            return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: kiri), const SizedBox(width: 30), Expanded(child: kanan)]);
-          }),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final mobile = constraints.maxWidth < 760;
+              final kiri = Column(
+                children: [
+                  pdfSettingField(
+                    'Nama Service Advisor',
+                    namaServiceAdvisorController,
+                  ),
+                  const SizedBox(height: 8),
+                  pdfSettingField('No. Telp/WA', noWaServiceAdvisorController),
+                ],
+              );
+              final kanan = Column(
+                children: [
+                  pdfSettingField('Nama Rekening', namaRekeningController),
+                  const SizedBox(height: 8),
+                  pdfSettingField('Nama Bank', namaBankController),
+                  const SizedBox(height: 8),
+                  pdfSettingField('Nomor Rekening', nomorRekeningController),
+                ],
+              );
+              if (mobile)
+                return Column(
+                  children: [kiri, const SizedBox(height: 8), kanan],
+                );
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: kiri),
+                  const SizedBox(width: 30),
+                  Expanded(child: kanan),
+                ],
+              );
+            },
+          ),
           const SizedBox(height: 10),
-          Align(alignment: Alignment.centerRight, child: FilledButton.icon(onPressed: () => setState(() {}), icon: const Icon(Icons.save_outlined), label: const Text('Terapkan'))),
+          Align(
+            alignment: Alignment.centerRight,
+            child: FilledButton.icon(
+              onPressed: () => setState(() {}),
+              icon: const Icon(Icons.save_outlined),
+              label: const Text('Terapkan'),
+            ),
+          ),
         ],
       ),
     );
   }
-
 
   Widget pengaturanTemplateWaSection() {
     return Container(
@@ -6089,16 +7073,21 @@ Terima kasih.
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(children: [
-            Icon(Icons.chat_outlined, color: biruUtama),
-            SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'TEMPLATE PESAN WHATSAPP TEMUAN',
-                style: TextStyle(color: biruUtama, fontWeight: FontWeight.bold),
+          const Row(
+            children: [
+              Icon(Icons.chat_outlined, color: biruUtama),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'TEMPLATE PESAN WHATSAPP TEMUAN',
+                  style: TextStyle(
+                    color: biruUtama,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ]),
+            ],
+          ),
           const SizedBox(height: 8),
           const Text(
             'Variabel: {nama}, {nopol}, {tipe}, {temuan}, {total}, {sa}. '
@@ -6143,7 +7132,6 @@ Terima kasih.
       ),
     );
   }
-
 
   Widget pengaturanSpreadsheetSection() {
     final namaAktifController = _namaSaSpreadsheetAktif;
@@ -6261,7 +7249,28 @@ Terima kasih.
   }
 
   Widget pdfSettingField(String label, TextEditingController controller) {
-    return Row(children: [SizedBox(width: 145, child: Text(label)), const Text(':  '), Expanded(child: SizedBox(height: 42, child: TextField(controller: controller, onChanged: (_) => setState(() {}), decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10)))))]);
+    return Row(
+      children: [
+        SizedBox(width: 145, child: Text(label)),
+        const Text(':  '),
+        Expanded(
+          child: SizedBox(
+            height: 42,
+            child: TextField(
+              controller: controller,
+              onChanged: (_) => setState(() {}),
+              decoration: const InputDecoration(
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   // ============================================================
@@ -6280,48 +7289,99 @@ Terima kasih.
           if (!tampilkanDiskon)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(children: [
-                const Expanded(child: Text('GRAND TOTAL', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text(rupiah(grandTotal), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              ]),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'GRAND TOTAL',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    rupiah(grandTotal),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
             )
           else ...[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(children: [
-                const Expanded(child: Text('GRAND TOTAL (Sebelum Diskon Grand)', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text(rupiah(totalSebelumDiskonGrand), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              ]),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'GRAND TOTAL (Sebelum Diskon Grand)',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    rupiah(totalSebelumDiskonGrand),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const Divider(height: 1, color: Color(0xFFFFB300)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              child: Row(children: [
-                const Text('Diskon Grand Total'),
-                const SizedBox(width: 18),
-                InkWell(
-                  onTap: () => editDiskonAkhir(judul: 'Diskon Grand Total', nilaiAwal: diskonGrandPersen, onSimpan: (v) => diskonGrandPersen = v),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: const Color(0xFFD8E2EE)),
-                      borderRadius: BorderRadius.circular(6),
+              child: Row(
+                children: [
+                  const Text('Diskon Grand Total'),
+                  const SizedBox(width: 18),
+                  InkWell(
+                    onTap: () => editDiskonAkhir(
+                      judul: 'Diskon Grand Total',
+                      nilaiAwal: diskonGrandPersen,
+                      onSimpan: (v) => diskonGrandPersen = v,
                     ),
-                    child: Text('${formatQty(diskonGrandPersen)} %'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFD8E2EE)),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text('${formatQty(diskonGrandPersen)} %'),
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Text('Diskon   ${rupiah(diskonGrand)}', style: const TextStyle(fontWeight: FontWeight.w600)),
-              ]),
+                  const Spacer(),
+                  Text(
+                    'Diskon   ${rupiah(diskonGrand)}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
             const Divider(height: 1, color: Color(0xFFFFB300)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(children: [
-                const Expanded(child: Text('GRAND TOTAL (Setelah Diskon Grand)', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text(rupiah(grandTotal), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              ]),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'GRAND TOTAL (Setelah Diskon Grand)',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    rupiah(grandTotal),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ],
@@ -6329,24 +7389,13 @@ Terima kasih.
     );
   }
 
-  Widget totalRow(
-    String label,
-    double value, {
-    bool negatif = false,
-  }) {
+  Widget totalRow(String label, double value, {bool negatif = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
+            child: Text(label, style: const TextStyle(color: Colors.white)),
           ),
           Text(
             negatif && value > 0 ? '-${rupiah(value)}' : rupiah(value),
@@ -6376,9 +7425,7 @@ Terima kasih.
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
-              alpha: 0.05,
-            ),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -6389,10 +7436,7 @@ Terima kasih.
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: biruUtama,
-              ),
+              Icon(icon, color: biruUtama),
               const SizedBox(width: 8),
               Text(
                 title,
@@ -6424,17 +7468,11 @@ String formatQty(double qty) {
   String hasil = qty.toStringAsFixed(3);
 
   while (hasil.endsWith('0')) {
-    hasil = hasil.substring(
-      0,
-      hasil.length - 1,
-    );
+    hasil = hasil.substring(0, hasil.length - 1);
   }
 
   if (hasil.endsWith('.')) {
-    hasil = hasil.substring(
-      0,
-      hasil.length - 1,
-    );
+    hasil = hasil.substring(0, hasil.length - 1);
   }
 
   return hasil.replaceAll('.', ',');
