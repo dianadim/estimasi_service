@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "654907094747",
+    "project_id": "eco-estimasi-service",
+    "storage_bucket": "eco-estimasi-service.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654907094747:android:8b2bfdd4c5e1f4c940fefe",
+        "android_client_info": {
+          "package_name": "com.example.eco_partman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb13ZahX_UeO4A9g0pmlDbTHnPkeAh3vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654907094747:android:5a583a29ba8ca2ce40fefe",
+        "android_client_info": {
+          "package_name": "com.example.estimasi_service"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb13ZahX_UeO4A9g0pmlDbTHnPkeAh3vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
