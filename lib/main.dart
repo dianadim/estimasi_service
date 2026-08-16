@@ -4978,21 +4978,55 @@ Terima kasih.
   }
 
   Future<void> _clearHistoryTemuan() async {
-    final history = ecoEstimasi
-        .where(_orderSudahDirelease)
-        .where((e) {
-          final saId = (e['saId'] ?? e['sa_id'] ?? _saIdAktif).toString();
-          return saId == _saIdAktif;
-        })
-        .map((e) => Map<String, dynamic>.from(e))
-        .toList();
+    late final List<Map<String, dynamic>> history;
+    try {
+      // Ambil langsung dari cloud. Daftar lokal bisa belum memuat order yang
+      // belum dibuat PDF, sehingga sebelumnya tombol Clear History tampak kosong.
+      final rows = await Supabase.instance.client
+          .from('eco_orders')
+          .select('id,nama_customer,no_polisi,sa_id,status,created_at')
+          .eq('sa_id', _saIdAktif)
+          .order('created_at', ascending: false);
+
+      history = (rows as List)
+          .whereType<Map>()
+          .map((raw) {
+            final cloud = Map<String, dynamic>.from(raw);
+            final id = (cloud['id'] ?? '').toString();
+            Map<String, dynamic>? lokal;
+            for (final item in ecoEstimasi) {
+              if ((item['id'] ?? '').toString() == id) {
+                lokal = Map<String, dynamic>.from(item);
+                break;
+              }
+            }
+            return <String, dynamic>{
+              if (lokal != null) ...lokal,
+              'id': id,
+              'namaCustomer':
+                  cloud['nama_customer'] ?? lokal?['namaCustomer'] ?? '-',
+              'noPolisi': cloud['no_polisi'] ?? lokal?['noPolisi'] ?? '-',
+              'saId': cloud['sa_id'] ?? _saIdAktif,
+              'status': cloud['status'] ?? lokal?['status'] ?? '-',
+              'jumlahTemuan': lokal?['jumlahTemuan'] ?? 0,
+            };
+          })
+          .where((e) => (e['id'] ?? '').toString().isNotEmpty)
+          .toList();
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mengambil history dari cloud: $error')),
+      );
+      return;
+    }
 
     if (history.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Belum ada history PDF yang sudah direlease untuk dibersihkan.',
+            'Belum ada history temuan milik SA ini untuk dibersihkan.',
           ),
         ),
       );
@@ -5018,14 +5052,14 @@ Terima kasih.
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Hanya order yang PDF-nya sudah direlease yang dapat dihapus. '
+                  'Semua order milik SA ini dapat dipilih, termasuk yang belum dibuat PDF. '
                   'Foto, data temuan, dan order di cloud akan dihapus permanen.',
                 ),
                 const SizedBox(height: 8),
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
                   value: dipilih.length == history.length,
-                  title: const Text('Pilih semua history selesai'),
+                  title: const Text('Pilih semua history temuan'),
                   onChanged: (v) => setD(() {
                     dipilih.clear();
                     if (v == true) {
